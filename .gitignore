@@ -4,6 +4,9 @@ node_modules/
 # Hasil build
 dist/
 
+# Arsip dan berkas yang tidak dipakai oleh aplikasi
+backup/
+
 # Cache dan file sementara Vite
 .vite/
 
@@ -29,3 +32,6 @@ Desktop.ini
 *~
 *.swp
 *.swo
+
+# Tangkapan layar diagnostik lokal
+*-check.png

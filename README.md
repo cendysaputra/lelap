@@ -1,9 +1,9 @@
 <div align="center">
-  <img src="assets/ui/logo.png" alt="Logo LELAP" width="560">
+  <img src="assets-src/ui/logo.png" alt="Logo LELAP" width="560">
 
   <p><em>Sebuah mimpi buruk tentang rumah, rasa takut, dan jalan pulang menuju sesuatu yang paling berharga.</em></p>
 
-  <img src="assets/bg/title.png" alt="Seorang anak berdiri di lorong rumah yang berubah menjadi dunia mimpi buruk" width="900">
+  <img src="assets-src/bg/title.png" alt="Seorang anak berdiri di lorong rumah yang berubah menjadi dunia mimpi buruk" width="900">
 </div>
 
 ## Ketika rumah tidak lagi terasa seperti rumah
@@ -13,11 +13,11 @@ LELAP adalah game platformer dua dimensi dengan tampilan samping dan gaya pixel 
 Di dalam mimpi ini tidak ada senjata dan tidak ada perlawanan. Sang anak hanya dapat berjalan, berlari, melompat, bersembunyi, dan mencari tempat yang masih diterangi cahaya. Di ujung mimpi, boneka beruang kesayangannya menunggu untuk ditemukan.
 
 <div align="center">
-  <img src="assets/player/idle.png" alt="Karakter utama LELAP" height="220">
+  <img src="assets-src/player/idle.png" alt="Karakter utama LELAP" height="220">
   &nbsp;&nbsp;&nbsp;
-  <img src="assets/objek/lampu.png" alt="Lampu tidur sebagai tempat berlindung" height="220">
+  <img src="assets-src/objek/lampu.png" alt="Lampu tidur sebagai tempat berlindung" height="220">
   &nbsp;&nbsp;&nbsp;
-  <img src="assets/objek/boneka.png" alt="Boneka beruang yang menjadi tujuan" height="220">
+  <img src="assets-src/objek/boneka.png" alt="Boneka beruang yang menjadi tujuan" height="220">
 </div>
 
 ## Mimpi Buruk
@@ -31,15 +31,15 @@ Perjalanan ini bukan tentang mengalahkan musuh. Ketegangan datang dari membaca k
 <table>
   <tr>
     <td align="center" width="33%">
-      <img src="assets/hantu/pengembara/melayang-1.png" alt="Hantu Pengembara" height="190"><br>
+      <img src="assets-src/hantu/pengembara/melayang-1.png" alt="Hantu Pengembara" height="190"><br>
       <strong>Pengembara</strong>
     </td>
     <td align="center" width="33%">
-      <img src="assets/hantu/pengintai/diam.png" alt="Hantu Pengintai" height="190"><br>
+      <img src="assets-src/hantu/pengintai/diam.png" alt="Hantu Pengintai" height="190"><br>
       <strong>Pengintai</strong>
     </td>
     <td align="center" width="33%">
-      <img src="assets/hantu/bayangan/muncul.png" alt="Hantu Bayangan" height="190"><br>
+      <img src="assets-src/hantu/bayangan/muncul.png" alt="Hantu Bayangan" height="190"><br>
       <strong>Bayangan</strong>
     </td>
   </tr>
@@ -82,9 +82,9 @@ Ketiganya mengikuti aturan yang sama terhadap cahaya. Tidak ada hantu yang dapat
 </table>
 
 <div align="center">
-  <img src="assets/objek/lemari.png" alt="Lemari tempat pemain bersembunyi" height="260">
+  <img src="assets-src/objek/lemari.png" alt="Lemari tempat pemain bersembunyi" height="260">
   &nbsp;&nbsp;&nbsp;&nbsp;
-  <img src="assets/player/sembunyi.png" alt="Anak sedang bersembunyi" height="180">
+  <img src="assets-src/player/sembunyi.png" alt="Anak sedang bersembunyi" height="180">
 </div>
 
 ## Kontrol
@@ -105,7 +105,7 @@ Visual LELAP menggunakan pixel art dengan warna malam berupa indigo, ungu berdeb
 Latar permainan tersusun atas tiga lapisan parallax. Pemandangan jauh, dinding lorong, dan benda di bagian depan bergerak dengan kecepatan berbeda untuk membuat rumah terasa luas sekaligus tidak nyata.
 
 <div align="center">
-  <img src="assets/bg/far.png" alt="Lapisan latar jauh dunia LELAP" width="900">
+  <img src="assets-src/bg/far.png" alt="Lapisan latar jauh dunia LELAP" width="900">
 </div>
 
 ## Fondasi proyek
@@ -119,7 +119,7 @@ Seluruh angka yang memengaruhi rasa permainan ditempatkan dalam konfigurasi terp
 Fokus proyek saat ini sepenuhnya berada pada penyelesaian **Mimpi Buruk** sebagai pengalaman singkat yang utuh. Tujuannya adalah menghadirkan perjalanan sekitar dua menit yang tetap terasa tegang, mudah dipahami, dan adil. Setiap ancaman harus memberi tanda sebelum menyerang, setiap kegagalan harus dapat dipelajari, dan jalan menuju boneka beruang harus terasa seperti keberanian kecil di tengah mimpi yang besar.
 
 <div align="center">
-  <img src="assets/objek/boneka.png" alt="Boneka beruang di ujung mimpi" height="220">
+  <img src="assets-src/objek/boneka.png" alt="Boneka beruang di ujung mimpi" height="220">
 
   <p><strong>Temukan beruangmu. Bangun dari mimpi buruk.</strong></p>
 </div>

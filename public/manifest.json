@@ -1,0 +1,178 @@
+{
+  "assets": {
+    "bg/far": {
+      "file": "bg/far.jpg",
+      "width": 480,
+      "height": 270
+    },
+    "bg/mid": {
+      "file": "bg/mid.png",
+      "width": 480,
+      "height": 270
+    },
+    "bg/near": {
+      "file": "bg/near.png",
+      "width": 480,
+      "height": 270
+    },
+    "bg/title": {
+      "file": "bg/title.jpg",
+      "width": 480,
+      "height": 270
+    },
+    "dekor/besar-1": {
+      "file": "dekor/besar-1.png",
+      "width": 47.75,
+      "height": 128
+    },
+    "dekor/besar-2": {
+      "file": "dekor/besar-2.png",
+      "width": 131.25,
+      "height": 128
+    },
+    "dekor/besar-3": {
+      "file": "dekor/besar-3.png",
+      "width": 57.25,
+      "height": 128
+    },
+    "dekor/kecil-1": {
+      "file": "dekor/kecil-1.png",
+      "width": 38.75,
+      "height": 48
+    },
+    "dekor/kecil-2": {
+      "file": "dekor/kecil-2.png",
+      "width": 99.75,
+      "height": 48
+    },
+    "dekor/kecil-3": {
+      "file": "dekor/kecil-3.png",
+      "width": 78.75,
+      "height": 48
+    },
+    "dekor/kecil-4": {
+      "file": "dekor/kecil-4.png",
+      "width": 68.5,
+      "height": 48
+    },
+    "hantu/bayangan/muncul": {
+      "file": "hantu/bayangan/muncul.png",
+      "width": 76.75,
+      "height": 128
+    },
+    "hantu/bayangan/sembunyi": {
+      "file": "hantu/bayangan/sembunyi.png",
+      "width": 112.75,
+      "height": 28.25
+    },
+    "hantu/pengembara/melayang-1": {
+      "file": "hantu/pengembara/melayang-1.png",
+      "width": 80.75,
+      "height": 72
+    },
+    "hantu/pengembara/melayang-2": {
+      "file": "hantu/pengembara/melayang-2.png",
+      "width": 81.75,
+      "height": 85.5
+    },
+    "hantu/pengintai/diam": {
+      "file": "hantu/pengintai/diam.png",
+      "width": 66.25,
+      "height": 112
+    },
+    "hantu/pengintai/maju": {
+      "file": "hantu/pengintai/maju.png",
+      "width": 86.25,
+      "height": 100.5
+    },
+    "objek/boneka": {
+      "file": "objek/boneka.png",
+      "width": 52.25,
+      "height": 56
+    },
+    "objek/lampu": {
+      "file": "objek/lampu.png",
+      "width": 59.5,
+      "height": 96
+    },
+    "objek/lemari": {
+      "file": "objek/lemari.png",
+      "width": 69,
+      "height": 128
+    },
+    "pijakan/buku": {
+      "file": "pijakan/buku.png",
+      "width": 64,
+      "height": 48.5
+    },
+    "pijakan/kotak": {
+      "file": "pijakan/kotak.png",
+      "width": 64,
+      "height": 29
+    },
+    "pijakan/meja": {
+      "file": "pijakan/meja.png",
+      "width": 128,
+      "height": 117.75
+    },
+    "pijakan/rak": {
+      "file": "pijakan/rak.png",
+      "width": 128,
+      "height": 25
+    },
+    "player/idle": {
+      "file": "player/idle.png",
+      "width": 34.5,
+      "height": 64
+    },
+    "player/jalan-1": {
+      "file": "player/jalan-1.png",
+      "width": 32.5,
+      "height": 61.25
+    },
+    "player/jalan-2": {
+      "file": "player/jalan-2.png",
+      "width": 29.75,
+      "height": 59.75
+    },
+    "player/lompat": {
+      "file": "player/lompat.png",
+      "width": 40.25,
+      "height": 60.25
+    },
+    "player/sembunyi": {
+      "file": "player/sembunyi.png",
+      "width": 38,
+      "height": 56.25
+    },
+    "tiles/fondasi": {
+      "file": "tiles/fondasi.png",
+      "width": 64,
+      "height": 64
+    },
+    "tiles/lantai": {
+      "file": "tiles/lantai.png",
+      "width": 64,
+      "height": 64
+    },
+    "ui/button": {
+      "file": "ui/button.png",
+      "width": 256,
+      "height": 56.75
+    },
+    "ui/logo": {
+      "file": "ui/logo.png",
+      "width": 600,
+      "height": 223
+    },
+    "ui/panel": {
+      "file": "ui/panel.png",
+      "width": 680,
+      "height": 294.5
+    }
+  },
+  "decor": {
+    "kecil": 4,
+    "besar": 3
+  }
+}
