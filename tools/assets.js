@@ -7,8 +7,8 @@ const OUTPUT = path.resolve("public");
 const SCALE = 4;
 
 const expected = [
-  "bg/title.png", "ui/logo.png", "ui/button.png", "ui/panel.png",
-  "player/idle.png", "player/jalan-1.png", "player/jalan-2.png",
+  "bg/title.png", "bg/title-asap.webp", "ui/logo.png", "ui/button.png", "ui/panel.png",
+  "player/idle.png", ...Array.from({ length: 6 }, (_, index) => `player/jalan-${index + 1}.png`),
   "player/lompat.png", "player/sembunyi.png",
   "hantu/pengembara/melayang-1.png", "hantu/pengembara/melayang-2.png",
   "hantu/pengintai/diam.png", "hantu/pengintai/maju.png",
@@ -110,11 +110,15 @@ async function writeManifestEntry(name, outputName, info) {
 }
 
 async function processBackground(file, name) {
-  const opaque = name === "bg/title.png" || name === "bg/far.png";
-  const outputName = name.replace(/\.png$/, opaque ? ".jpg" : ".png");
+  const key = assetKey(name);
+  const opaque = key === "bg/title" || key === "bg/far";
+  const preserveAspect = key === "bg/title-asap";
+  const outputName = `${key}.${opaque ? "jpg" : "png"}`;
   const target = path.join(OUTPUT, outputName);
   await fs.mkdir(path.dirname(target), { recursive: true });
-  let pipeline = sharp(file).resize(1920, 1080, { fit: "cover", position: "centre" });
+  let pipeline = preserveAspect
+    ? sharp(file).resize({ width: 1920 })
+    : sharp(file).resize(1920, 1080, { fit: "cover", position: "centre" });
   pipeline = opaque
     ? pipeline.jpeg({ quality: 95, chromaSubsampling: "4:4:4" })
     : pipeline.png({ compressionLevel: 9 });
@@ -161,7 +165,7 @@ async function main() {
   const scales = await groupScales();
   for (const file of files) {
     const name = relative(file);
-    if (path.extname(file).toLowerCase() !== ".png") {
+    if (![".png", ".webp"].includes(path.extname(file).toLowerCase())) {
       skipped += 1;
       console.warn(`Dilewati: ${name} (file tidak dikenal)`);
       continue;

@@ -12,6 +12,16 @@ function addCover(k, name) {
   return k.add([k.sprite(name), k.pos(k.center()), k.anchor("center"), k.scale(fileScale), k.fixed(), k.z(-100)]);
 }
 
+function addBottomLayer(k, name) {
+  if (!hasAsset(name)) return null;
+  const data = assetData(name);
+  const fileScale = k.width() / (data.width * 4);
+  return k.add([
+    k.sprite(name), k.pos(k.width() / 2, k.height()),
+    k.anchor("bot"), k.scale(fileScale), k.fixed(), k.z(-90),
+  ]);
+}
+
 function showControls(k) {
   const panel = createPanel(k);
   const uiScale = k.height() / VIEW_HEIGHT;
@@ -33,14 +43,13 @@ export function registerMenuScene(k) {
   k.scene("menu", () => {
     k.setBackground(...COLORS.night);
     addCover(k, "bg/title");
+    addBottomLayer(k, "bg/title-asap");
     const uiScale = k.height() / VIEW_HEIGHT;
     if (hasAsset("ui/logo")) {
-      const logo = k.add([
+      k.add([
         k.sprite("ui/logo"), k.pos(k.width() / 2, k.height() * 0.28),
         k.anchor("center"), k.scale(0.25 * uiScale), k.fixed(), k.z(10),
-        { originY: k.height() * 0.28 },
       ]);
-      logo.onUpdate(() => { logo.pos.y = logo.originY + Math.sin(k.time() * 1.5) * 7 * uiScale; });
     } else addGameText(k, "LELAP", k.vec2(k.width() / 2, k.height() * 0.28), { size: 86 });
     for (let index = 0; index < 24; index += 1) {
       const dust = k.add([

@@ -6,6 +6,8 @@ import { hasAsset } from "../manifest.js";
 import { addGroundShadow, setVisualFrame } from "./shared.js";
 import { fadeTo } from "../scenes/shared.js";
 
+const WALK_FRAMES = Array.from({ length: 6 }, (_, index) => `player/jalan-${index + 1}`);
+
 export function createPlayer(k, position, worldHeight) {
   const player = k.add([
     k.pos(position),
@@ -107,7 +109,7 @@ export function createPlayer(k, position, worldHeight) {
     if (!grounded) frame = "player/lompat";
     else if (direction) {
       const fps = player.isRunning ? 10 : 6;
-      frame = Math.floor(player.animationTime * fps) % 2 ? "player/jalan-1" : "player/jalan-2";
+      frame = WALK_FRAMES[Math.floor(player.animationTime * fps) % WALK_FRAMES.length];
     }
     setVisualFrame(k, visual, frame);
     const stretchY = !grounded ? 1.08 : player.landingTime > 0 ? 0.9 : 1;
