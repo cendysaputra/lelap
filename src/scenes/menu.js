@@ -1,9 +1,11 @@
 import { assetData, hasAsset } from "../manifest.js";
-import { COLORS, VIEW_HEIGHT } from "../config.js";
+import { COLORS, MENU_LOGO_SCALE, VIEW_HEIGHT } from "../config.js";
 import { createButton, enableButtonNavigation } from "../ui/button.js";
 import { createPanel } from "../ui/panel.js";
 import { addGameText } from "../ui/text.js";
 import { fadeTo, requestFullscreen } from "./shared.js";
+import { addMenuAtmosphere } from "../systems/menu-atmosphere.js";
+import { pauseMenuMusic, prepareMenuMusic, resumeMenuMusic } from "../systems/music.js";
 
 function addCover(k, name) {
   if (!hasAsset(name)) return k.add([k.rect(k.width(), k.height()), k.color(...COLORS.night), k.fixed()]);
@@ -17,7 +19,8 @@ function addBottomLayer(k, name) {
   const data = assetData(name);
   const fileScale = k.width() / (data.width * 4);
   return k.add([
-    k.sprite(name), k.pos(k.width() / 2, k.height()),
+    k.sprite(name, data.defaultAnim ? { anim: data.defaultAnim } : {}),
+    k.pos(k.width() / 2, k.height()),
     k.anchor("bot"), k.scale(fileScale), k.fixed(), k.z(-90),
   ]);
 }
@@ -42,13 +45,23 @@ function showControls(k) {
 export function registerMenuScene(k) {
   k.scene("menu", () => {
     k.setBackground(...COLORS.night);
-    addCover(k, "bg/title");
+    prepareMenuMusic(k);
+    let leavingMenu = false;
+    const unlockMusic = () => { if (!leavingMenu) resumeMenuMusic(k); };
+    const mouseUnlock = k.onMousePress(unlockMusic);
+    const keyUnlock = k.onKeyPress(unlockMusic);
+    k.onSceneLeave(() => {
+      mouseUnlock.cancel();
+      keyUnlock.cancel();
+    });
+    const cover = addCover(k, "bg/title");
+    addMenuAtmosphere(k, cover, assetData("bg/title"));
     addBottomLayer(k, "bg/title-asap");
     const uiScale = k.height() / VIEW_HEIGHT;
     if (hasAsset("ui/logo")) {
       k.add([
         k.sprite("ui/logo"), k.pos(k.width() / 2, k.height() * 0.28),
-        k.anchor("center"), k.scale(0.25 * uiScale), k.fixed(), k.z(10),
+        k.anchor("center"), k.scale(MENU_LOGO_SCALE * uiScale), k.fixed(), k.z(10),
       ]);
     } else addGameText(k, "LELAP", k.vec2(k.width() / 2, k.height() * 0.28), { size: 86 });
     for (let index = 0; index < 24; index += 1) {
@@ -61,7 +74,12 @@ export function registerMenuScene(k) {
     }
     const start = createButton(k, {
       label: "MULAI", pos: k.vec2(k.width() / 2, k.height() * 0.65),
-      onPress: async () => { await requestFullscreen(k); fadeTo(k, "game"); },
+      onPress: async () => {
+        leavingMenu = true;
+        pauseMenuMusic();
+        await requestFullscreen(k);
+        fadeTo(k, "game");
+      },
     });
     const controls = createButton(k, {
       label: "CARA MAIN", pos: k.vec2(k.width() / 2, k.height() * 0.78), onPress: () => showControls(k),

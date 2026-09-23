@@ -6,7 +6,7 @@ import { hasAsset } from "../manifest.js";
 import { addGroundShadow, setVisualFrame } from "./shared.js";
 import { fadeTo } from "../scenes/shared.js";
 
-const WALK_FRAMES = Array.from({ length: 6 }, (_, index) => `player/jalan-${index + 1}`);
+const WALK_FRAMES = Array.from({ length: 8 }, (_, index) => `player/jalan-${index + 1}`);
 
 export function createPlayer(k, position, worldHeight) {
   const player = k.add([

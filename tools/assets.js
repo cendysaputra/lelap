@@ -1,14 +1,18 @@
 import fs from "node:fs/promises";
 import path from "node:path";
 import sharp from "sharp";
+import { buildAnimatedBackground } from "./animated-background.js";
+import { copyMusicAsset } from "./audio-assets.js";
+import { buildFavicon } from "./favicon.js";
 
 const SOURCE = path.resolve("assets-src");
 const OUTPUT = path.resolve("public");
 const SCALE = 4;
 
 const expected = [
-  "bg/title.png", "bg/title-asap.webp", "ui/logo.png", "ui/button.png", "ui/panel.png",
-  "player/idle.png", ...Array.from({ length: 6 }, (_, index) => `player/jalan-${index + 1}.png`),
+  "favicon.png", "bg/title.png", "bg/title-asap.webp", "ui/logo.png", "ui/button.png", "ui/panel.png",
+  "music/deep-pulse.mp3",
+  "player/idle.png", ...Array.from({ length: 8 }, (_, index) => `player/jalan-${index + 1}.png`),
   "player/lompat.png", "player/sembunyi.png",
   "hantu/pengembara/melayang-1.png", "hantu/pengembara/melayang-2.png",
   "hantu/pengintai/diam.png", "hantu/pengintai/maju.png",
@@ -45,7 +49,7 @@ const groups = [
   { prefix: "hantu/bayangan/", reference: "hantu/bayangan/muncul.png" },
 ];
 
-const manifest = { assets: {}, decor: { kecil: 0, besar: 0 } };
+const manifest = { assets: {}, music: {}, decor: { kecil: 0, besar: 0 } };
 let processed = 0;
 let skipped = 0;
 let warnings = 0;
@@ -112,18 +116,23 @@ async function writeManifestEntry(name, outputName, info) {
 async function processBackground(file, name) {
   const key = assetKey(name);
   const opaque = key === "bg/title" || key === "bg/far";
-  const preserveAspect = key === "bg/title-asap";
   const outputName = `${key}.${opaque ? "jpg" : "png"}`;
   const target = path.join(OUTPUT, outputName);
   await fs.mkdir(path.dirname(target), { recursive: true });
-  let pipeline = preserveAspect
-    ? sharp(file).resize({ width: 1920 })
-    : sharp(file).resize(1920, 1080, { fit: "cover", position: "centre" });
+  let pipeline = sharp(file).resize(1920, 1080, { fit: "cover", position: "centre" });
   pipeline = opaque
     ? pipeline.jpeg({ quality: 95, chromaSubsampling: "4:4:4" })
     : pipeline.png({ compressionLevel: 9 });
   const info = await pipeline.toFile(target);
   await writeManifestEntry(name, outputName, info);
+}
+
+async function processAnimatedBackground(file, name) {
+  const key = assetKey(name);
+  const outputName = `${key}.png`;
+  const target = path.join(OUTPUT, outputName);
+  await fs.mkdir(path.dirname(target), { recursive: true });
+  manifest.assets[key] = await buildAnimatedBackground(file, target, outputName, SCALE);
 }
 
 async function processTile(file, name) {
@@ -165,13 +174,18 @@ async function main() {
   const scales = await groupScales();
   for (const file of files) {
     const name = relative(file);
-    if (![".png", ".webp"].includes(path.extname(file).toLowerCase())) {
+    const extension = path.extname(file).toLowerCase();
+    if (![".png", ".webp", ".mp3"].includes(extension)) {
       skipped += 1;
       console.warn(`Dilewati: ${name} (file tidak dikenal)`);
       continue;
     }
     try {
-      if (name.startsWith("bg/")) await processBackground(file, name);
+      if (name === "favicon.png") await buildFavicon(file, path.join(OUTPUT, name));
+      else if (name.startsWith("music/") && extension === ".mp3") {
+        manifest.music[assetKey(name)] = await copyMusicAsset(file, name, OUTPUT);
+      } else if (name === "bg/title-asap.webp") await processAnimatedBackground(file, name);
+      else if (name.startsWith("bg/")) await processBackground(file, name);
       else if (name.startsWith("tiles/")) await processTile(file, name);
       else if (findRule(name)) await processSprite(file, name, scales);
       else {

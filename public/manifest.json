@@ -17,8 +17,19 @@
     },
     "bg/title-asap": {
       "file": "bg/title-asap.png",
-      "width": 480,
-      "height": 160
+      "width": 240,
+      "height": 80,
+      "sliceX": 6,
+      "sliceY": 5,
+      "anims": {
+        "drift": {
+          "from": 0,
+          "to": 29,
+          "speed": 10,
+          "loop": true
+        }
+      },
+      "defaultAnim": "drift"
     },
     "bg/title": {
       "file": "bg/title.jpg",
@@ -133,32 +144,42 @@
     "player/jalan-1": {
       "file": "player/jalan-1.png",
       "width": 32.75,
-      "height": 60.75
+      "height": 59.5
     },
     "player/jalan-2": {
       "file": "player/jalan-2.png",
-      "width": 32.75,
+      "width": 33,
       "height": 59.75
     },
     "player/jalan-3": {
       "file": "player/jalan-3.png",
-      "width": 31.25,
-      "height": 60.75
+      "width": 32.75,
+      "height": 60
     },
     "player/jalan-4": {
       "file": "player/jalan-4.png",
-      "width": 30.75,
-      "height": 58.5
-    },
-    "player/jalan-5": {
-      "file": "player/jalan-5.png",
       "width": 32.5,
       "height": 59.75
     },
+    "player/jalan-5": {
+      "file": "player/jalan-5.png",
+      "width": 32.75,
+      "height": 59.25
+    },
     "player/jalan-6": {
       "file": "player/jalan-6.png",
-      "width": 32,
-      "height": 61
+      "width": 32.75,
+      "height": 59.75
+    },
+    "player/jalan-7": {
+      "file": "player/jalan-7.png",
+      "width": 32.5,
+      "height": 59.75
+    },
+    "player/jalan-8": {
+      "file": "player/jalan-8.png",
+      "width": 33,
+      "height": 59
     },
     "player/lompat": {
       "file": "player/lompat.png",
@@ -188,12 +209,17 @@
     "ui/logo": {
       "file": "ui/logo.png",
       "width": 600,
-      "height": 223
+      "height": 221.5
     },
     "ui/panel": {
       "file": "ui/panel.png",
       "width": 680,
       "height": 294.5
+    }
+  },
+  "music": {
+    "music/deep-pulse": {
+      "file": "music/deep-pulse.mp3"
     }
   },
   "decor": {

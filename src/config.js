@@ -31,6 +31,28 @@ export const LAMP_RADIUS = 160;
 export const PLAYER_LIGHT_RADIUS = 128;
 export const CLOSET_SAFE_DISTANCE = 64;
 
+export const MENU_BACKGROUND_SCALE = 1.012;
+export const MENU_BACKGROUND_SWAY_X = 3;
+export const MENU_BACKGROUND_SWAY_Y = 2;
+export const MENU_BACKGROUND_SWAY_SPEED = 0.12;
+export const MENU_MOONLIGHT_OPACITY = 0.018;
+export const MENU_MOONLIGHT_PULSE = 0.007;
+export const MENU_LAMP_FLICKER_SPEED = 2.2;
+export const MENU_MUSIC_VOLUME = 0.4;
+export const MENU_LOGO_SCALE = 0.3;
+export const MENU_LAMP_GLOWS = [
+  { x: 0.058, y: 0.601, radius: 0.035, phase: 0.2 },
+  { x: 0.112, y: 0.61, radius: 0.04, phase: 1.6 },
+  { x: 0.39, y: 0.657, radius: 0.038, phase: 3.1 },
+  { x: 0.826, y: 0.655, radius: 0.042, phase: 4.7 },
+  { x: 0.973, y: 0.493, radius: 0.045, phase: 5.8 },
+];
+export const MENU_GLOW_LAYERS = [
+  { scale: 1, opacity: 0.025 },
+  { scale: 0.62, opacity: 0.045 },
+  { scale: 0.3, opacity: 0.075 },
+];
+
 export const COLORS = {
   night: [21, 19, 38],
   shadow: [43, 36, 70],
