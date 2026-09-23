@@ -4,7 +4,7 @@ import {
   WANDERER_PATROL_SPEED, WANDERER_SIGHT_HEIGHT, WANDERER_SIGHT_RANGE,
 } from "../config.js";
 import { hasAsset } from "../manifest.js";
-import { addGroundShadow, blockedByLamp, setVisualFrame } from "./shared.js";
+import { addGroundShadow, moveWithLampRepel, setVisualFrame } from "./shared.js";
 
 function lineBlocked(solids, from, to) {
   const left = Math.min(from.x, to.x);
@@ -48,6 +48,15 @@ export function createWanderer(k, position) {
     visual.pos.y = Math.sin(k.time() * 2 + ghost.origin.x) * GHOST_BOB;
     visual.scale.x = Math.abs(visual.scale.x) * ghost.facing;
 
+    const immediateRetreat = moveWithLampRepel(k, ghost, ghost.pos);
+    if (immediateRetreat.repelled) {
+      ghost.pos = immediateRetreat.position;
+      ghost.facing = Math.sign(immediateRetreat.direction.x) || ghost.facing;
+      if (ghost.state !== "patrol") ghost.state = "return";
+      alert.opacity = 0;
+      return;
+    }
+
     const dx = player.pos.x - ghost.pos.x;
     const dy = player.pos.y - ghost.pos.y;
     const inFront = Math.sign(dx || ghost.facing) === ghost.facing;
@@ -64,8 +73,12 @@ export function createWanderer(k, position) {
         if (player.isRunning && Math.abs(dx) <= WANDERER_HEAR_RANGE) ghost.facing = Math.sign(dx) || ghost.facing;
         const next = ghost.pos.add(k.vec2(ghost.facing * WANDERER_PATROL_SPEED * k.dt(), 0));
         const hitsWall = solids.some((solid) => solid.hasPoint?.(next.add(ghost.facing * 34, -34)));
-        if (hitsWall || Math.abs(next.x - ghost.origin.x) > WANDERER_PATROL_RANGE || blockedByLamp(k, next)) ghost.facing *= -1;
-        else ghost.pos = next;
+        const movement = moveWithLampRepel(k, ghost, next);
+        if (movement.repelled) {
+          ghost.pos = movement.position;
+          ghost.facing = Math.sign(movement.direction.x) || ghost.facing;
+        } else if (hitsWall || Math.abs(next.x - ghost.origin.x) > WANDERER_PATROL_RANGE) ghost.facing *= -1;
+        else ghost.pos = movement.position;
       }
     } else if (ghost.state === "alert") {
       ghost.stateTime += k.dt();
@@ -79,14 +92,21 @@ export function createWanderer(k, position) {
       ghost.lostTime = sees ? 0 : ghost.lostTime + k.dt();
       const direction = player.pos.sub(ghost.pos).unit();
       const next = ghost.pos.add(direction.scale(WANDERER_CHASE_SPEED * k.dt()));
-      if (!blockedByLamp(k, next)) ghost.pos = next;
+      const movement = moveWithLampRepel(k, ghost, next);
+      ghost.pos = movement.position;
+      if (movement.repelled) ghost.facing = Math.sign(movement.direction.x) || ghost.facing;
       if (ghost.lostTime >= WANDERER_LOSE_TIME) ghost.state = "return";
     } else {
       const delta = ghost.origin.sub(ghost.pos);
       if (delta.len() < 8) {
         ghost.pos = ghost.origin.clone();
         ghost.state = "patrol";
-      } else ghost.pos = ghost.pos.add(delta.unit().scale(WANDERER_PATROL_SPEED * k.dt()));
+      } else {
+        const next = ghost.pos.add(delta.unit().scale(WANDERER_PATROL_SPEED * k.dt()));
+        const movement = moveWithLampRepel(k, ghost, next);
+        ghost.pos = movement.position;
+        if (movement.repelled) ghost.facing = Math.sign(movement.direction.x) || ghost.facing;
+      }
       if (sees) ghost.state = "alert";
     }
   });

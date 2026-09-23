@@ -10,21 +10,25 @@ terlebih dahulu karena file tersebut merupakan sumber aturan utama proyek.
 3. `plan/04-finalisasi.md`
 4. File sumber yang berhubungan langsung dengan tugas yang akan dikerjakan
 
-Jangan mengerjakan Level 2, audio, save game, kontrol mobile, deployment,
-test suite, TypeScript, dependency baru, atau refactor di luar masalah yang
-sedang diperbaiki.
+Jangan mengerjakan Level 2, save game, kontrol mobile, deployment, test suite,
+TypeScript, dependency baru, audio tambahan selain musik menu `deep-pulse`,
+atau refactor di luar masalah yang sedang diperbaiki tanpa instruksi pengguna.
 
 ## Posisi proyek saat ini
 
-Proyek telah mencapai **`plan/03-build.md` Tahap 4**, tetapi belum memenuhi
+Proyek telah mencapai **`plan/03-build.md` Tahap 4** dan mendapat beberapa
+penyempurnaan menu serta aset pada **23 September 2026**, tetapi belum memenuhi
 seluruh definisi selesai pada Tahap 1 dan Tahap 4. `plan/04-finalisasi.md`
 belum selesai dan proyek belum boleh dianggap siap deploy.
 
-Build production terakhir berhasil:
+Pipeline aset dan build production terakhir berhasil:
 
 ```text
+npm run assets
+43 diproses, 0 dilewati, 0 peringatan
+
 npm run build
-29 modules transformed
+31 modules transformed
 build selesai tanpa error
 ```
 
@@ -32,21 +36,61 @@ build selesai tanpa error
 
 - Setup KAPLAY, Vite, JavaScript, dan Sharp.
 - Pemrosesan aset melalui `tools/assets.js`.
-- `public/manifest.json` berisi seluruh 34 aset yang tercantum dalam daftar
-  aset. Catatan: `plan/02-aset.md` menulis total 33, tetapi jumlah itemnya
-  sebenarnya 34.
+- `public/manifest.json` berisi 41 sprite/background dan 1 musik streaming.
+  Favicon diproses terpisah oleh pipeline menjadi `public/favicon.png`.
 - Loading scene, menu, panel Cara Main, fullscreen, dan UI dasar.
 - Loader level berbasis simbol, validasi baris, tile, solid, platform satu
   arah, dekor deterministik, dan Level 1 bernama "Mimpi Buruk".
-- Player: jalan, lari, stamina, lompat, coyote time, animasi, lemari, kalah
-  karena hantu atau jatuh, dan menang saat menyentuh boneka.
+- Player: jalan, lari, stamina, lompat, coyote time, lemari, kalah karena
+  hantu atau jatuh, dan menang saat menyentuh boneka. Walk cycle telah memakai
+  8 frame pada 6 FPS saat berjalan dan 10 FPS saat berlari.
 - Background tiga lapis, kamera, dan darkness overlay.
 - Ketiga hantu: Pengembara, Pengintai, dan Bayangan.
 - Lemari, lampu sebagai zona aman, boneka sebagai tujuan, game over, win,
   dan pause.
-- Semua file di dalam `src/` masih di bawah 200 baris.
+- Menu memakai asap animasi 30 frame pada 10 FPS, gerakan background halus,
+  cahaya bulan berdenyut, serta lima cahaya lampu yang berkedip tidak serempak.
+- Musik `deep-pulse` dimainkan berulang di menu setelah interaksi pertama
+  pengguna, di-pause ketika tombol `MULAI` ditekan, dan dapat dilanjutkan saat
+  kembali ke menu tanpa membuat instance ganda.
+- Logo menu diperbesar dengan skala `0.30`. Favicon bulan dan hantu 128×128
+  tersedia dan terhubung dari `index.html`.
+- Aset musik dan favicon sudah dipindahkan dari root ke `assets-src/` serta
+  diproses otomatis ke `public/`.
+- Semua file di dalam `src/` masih di bawah 200 baris; file terpanjang saat
+  audit terakhir adalah `src/entities/player.js` dengan 124 baris.
 
 ## Kekurangan yang sudah diketahui
+
+### Penyesuaian kesulitan Level 1 — 23 September 2026
+
+Revisi lanjutan berdasarkan feedback objek terlalu rapat dan hantu terlalu
+rendah: dekor kecil/besar serta meja kedua dikeluarkan dari peta; jarak
+horizontal minimum antar tepi objek sekarang 256 unit (4 tile), berdasarkan
+ukuran manifest. Rak kedua dipindah setelah jurang kedua. Pengembara naik
+1 tile, sehingga posisi kakinya 128 unit di atas lantai; player di lantai
+tidak langsung masuk batas deteksi vertikal patrol. Patroli 80, kejar 300,
+jangkauan patroli/penglihatan 256, peringatan 0,8 detik. Pengintai memiliki
+jangkauan 384 dan kecepatan 140. Validasi peta, dukungan lantai, jarak objek,
+dan build berhasil; revisi lanjutan ini belum dimainkan ulang di browser.
+Catatan di bawah merekam pemeriksaan sebelum revisi lanjutan tersebut.
+
+- Jurang pertama 1 tile, kedua 2 tile; area ancang-ancang dan pendaratan kosong.
+- Rak berada 89 unit di atas lantai. Meja berdiri di lantai (permukaan
+  117,75 unit), bukan di atas jurang. Dekor, lampu, dan lemari diberi ruang.
+- Collision rak/meja memakai aturan pendaratan dari atas karena effector
+  bawaan KAPLAY 3001 menolak body yang sedang jatuh.
+- Pengembara mengejar dengan kecepatan 330 dan peringatan 0,6 detik;
+  Pengintai bergerak 160; Bayangan memberi peringatan 0,7 detik.
+- Sesuai permintaan terbaru pengguna, hantu bergerak menjauh dari lampu
+  tanpa berhenti di tepinya. Gerakan mundur dipertahankan sampai keluar
+  dari radius tolak ditambah 128 unit agar tidak bergetar di batas cahaya.
+- Verifikasi browser terarah: keempat platform berhasil diinjak setelah
+  melompat dari bawah; jurang 1 tile lolos sambil berjalan; jurang 2 tile
+  lolos sambil berlari; Pengembara dan Pengintai menjauh saat dekat lampu.
+  Tidak ada error browser yang dilaporkan. Build production berhasil.
+- Pemeriksaan ini memakai penempatan player terkontrol, bukan permainan
+  lengkap dari awal sampai akhir; checklist finalisasi tetap belum selesai.
 
 ### Sebelum menyatakan Tahap 1 selesai
 
@@ -83,22 +127,37 @@ build selesai tanpa error
   diminta finalisasi.
 - Masih ada banyak angka tuning di luar `src/config.js`. Audit dahulu dan
   pindahkan hanya angka yang benar-benar merupakan tuning perilaku/visual.
-- Pembersihan log, kode tidak terpakai, dan aset tidak terpakai belum selesai.
-- Ukuran `dist/` dan lima file terbesarnya belum dilaporkan sebagai hasil
-  finalisasi.
+- Pembersihan awal root sudah dilakukan: folder paket walk-cycle, folder
+  `player-frame`, folder `backup`, serta duplikat root yang sudah dipindahkan
+  ke pipeline aset telah dihapus. Audit akhir kode/aset tidak terpakai tetap
+  belum selesai; `public/bg/title-asap.webp` masih perlu dinilai karena runtime
+  memakai spritesheet `public/bg/title-asap.png`.
+
+### Snapshot ukuran production terakhir
+
+- Total `dist/`: 29.910.023 byte (sekitar 28,5 MiB), 49 file.
+- Lima file terbesar:
+  - `dist/bg/title-asap.png`: 5.942.598 byte
+  - `dist/music/deep-pulse.mp3`: 5.333.611 byte
+  - `dist/bg/title-asap.webp`: 3.408.774 byte
+  - `dist/ui/logo.png`: 3.167.625 byte
+  - `dist/ui/panel.png`: 2.891.252 byte
 
 ## Kondisi Git yang perlu dijaga
 
-Saat audit terakhir terdapat dua file untracked:
+Working tree masih berisi perubahan aktif milik pengguna dan hasil pekerjaan
+terbaru. Jangan me-reset atau mengembalikan perubahan tersebut. Perubahan yang
+memang disengaja antara lain:
 
-```text
-public/bg/title-asap.png
-title-asap.webp
-```
+- penggantian `assets-src/bg/near.png`;
+- walk cycle player 8 frame dan hasil prosesnya di `public/player/`;
+- spritesheet asap menu, musik menu, serta favicon;
+- penghapusan `player-frame/`, `deep-pulse.mp3`, dan `title-asap.webp` dari
+  root setelah sumber resminya dipindah ke `assets-src/`;
+- sistem suasana menu, sistem musik, dan helper pipeline aset baru.
 
-Keduanya milik pengguna sampai terbukti sebaliknya. Jangan hapus, pindahkan,
-atau memasukkannya ke manifest tanpa instruksi pengguna. `public/bg/title-asap.png`
-akan ikut tersalin ke `dist/` oleh Vite walaupun tidak ada di manifest.
+Gunakan `git status --short` sebelum perubahan berikutnya dan pertahankan
+semua perubahan di atas kecuali pengguna meminta lain.
 
 ## Langkah yang disarankan untuk agent berikutnya
 
@@ -106,7 +165,8 @@ akan ikut tersalin ke `dist/` oleh Vite walaupun tidak ada di manifest.
 2. Perbaiki kekurangan Tahap 1 yang dapat diverifikasi dari kode: resize UI,
    navigasi keyboard panel Cara Main, dan navigasi keyboard scene win.
 3. Perbaiki kekurangan Tahap 4 yang eksplisit: fade masuk dan kilau boneka.
-4. Jalankan `npm run build` dan pastikan tidak ada error baru.
+4. Jalankan `npm run assets` lalu `npm run build` dan pastikan tidak ada
+   peringatan atau error baru.
 5. Ikuti checklist manual `plan/04-finalisasi.md` dari awal sampai akhir.
    Catat hasil nyata; jangan mencentang berdasarkan keberadaan kode saja.
 6. Perbaiki satu bug per perubahan agar tidak melebar dari scope.
@@ -124,4 +184,3 @@ Tahap selanjutnya baru boleh disebut selesai apabila:
 - `npm run build` dan `npm run preview` berhasil.
 - Versi preview berjalan sama dengan versi development tanpa error console.
 - Game telah dicoba di minimal dua browser desktop.
-

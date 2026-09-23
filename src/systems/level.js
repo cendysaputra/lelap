@@ -1,4 +1,4 @@
-import { TILE } from "../config.js";
+import { PLATFORM_COLLISION_HEIGHT, TILE } from "../config.js";
 import { assetData, decorCount, worldSprite } from "../manifest.js";
 import { validateLevel } from "../levels.js";
 
@@ -18,12 +18,18 @@ function platform(k, asset, width) {
   const height = assetData(asset)?.height ?? TILE / 2;
   return [
     k.pos(0, TILE - height),
-    k.area({ shape: new k.Rect(k.vec2(0, 0), width, 24) }),
-    k.body({ isStatic: true }), k.platformEffector({ useOneWay: true }),
+    k.area({ shape: new k.Rect(k.vec2(0, 0), width, PLATFORM_COLLISION_HEIGHT) }),
+    k.body({ isStatic: true }),
     k.z(5), "platform",
     {
       id: "platformVisual",
       add() {
+        // KAPLAY 3001's effector rejects falling bodies; resolve only landings.
+        this.onBeforePhysicsResolve((collision) => {
+          if (!collision.isTop() || (collision.target.vel?.y ?? 0) < 0) {
+            collision.preventResolution();
+          }
+        });
         this.add([
           ...worldSprite(k, asset, { width, height }),
           k.anchor("topleft"), k.z(1),
@@ -50,8 +56,8 @@ export function buildLevel(k, level, entities) {
   unknown.forEach((symbol) => console.warn(`Simbol level tidak dikenal: "${symbol}"`));
 
   const floorTile = (position) => {
-    const x = Math.round(position.x / TILE);
-    const y = Math.round(position.y / TILE);
+    const x = position.x;
+    const y = position.y;
     const top = y === 0 || level.map[y - 1]?.[x] !== "#";
     return [
       ...worldSprite(k, top ? "tiles/lantai" : "tiles/fondasi", { width: TILE, height: TILE }),

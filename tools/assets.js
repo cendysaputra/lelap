@@ -21,8 +21,6 @@ const expected = [
   "pijakan/rak.png", "pijakan/meja.png", "pijakan/buku.png",
   "pijakan/kotak.png", "tiles/lantai.png", "tiles/fondasi.png",
   "bg/far.png", "bg/mid.png", "bg/near.png",
-  ...Array.from({ length: 4 }, (_, index) => `dekor/kecil-${index + 1}.png`),
-  ...Array.from({ length: 3 }, (_, index) => `dekor/besar-${index + 1}.png`),
 ];
 
 const fixedRules = [

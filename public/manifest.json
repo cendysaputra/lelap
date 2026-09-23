@@ -36,41 +36,6 @@
       "width": 480,
       "height": 270
     },
-    "dekor/besar-1": {
-      "file": "dekor/besar-1.png",
-      "width": 47.75,
-      "height": 128
-    },
-    "dekor/besar-2": {
-      "file": "dekor/besar-2.png",
-      "width": 131.25,
-      "height": 128
-    },
-    "dekor/besar-3": {
-      "file": "dekor/besar-3.png",
-      "width": 57.25,
-      "height": 128
-    },
-    "dekor/kecil-1": {
-      "file": "dekor/kecil-1.png",
-      "width": 38.75,
-      "height": 48
-    },
-    "dekor/kecil-2": {
-      "file": "dekor/kecil-2.png",
-      "width": 99.75,
-      "height": 48
-    },
-    "dekor/kecil-3": {
-      "file": "dekor/kecil-3.png",
-      "width": 78.75,
-      "height": 48
-    },
-    "dekor/kecil-4": {
-      "file": "dekor/kecil-4.png",
-      "width": 68.5,
-      "height": 48
-    },
     "hantu/bayangan/muncul": {
       "file": "hantu/bayangan/muncul.png",
       "width": 76.75,
@@ -223,7 +188,7 @@
     }
   },
   "decor": {
-    "kecil": 4,
-    "besar": 3
+    "kecil": 0,
+    "besar": 0
   }
 }
