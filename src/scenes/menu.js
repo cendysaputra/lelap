@@ -5,7 +5,9 @@ import { createPanel } from "../ui/panel.js";
 import { addGameText } from "../ui/text.js";
 import { fadeTo, requestFullscreen } from "./shared.js";
 import { addMenuAtmosphere } from "../systems/menu-atmosphere.js";
-import { pauseMenuMusic, prepareMenuMusic, resumeMenuMusic } from "../systems/music.js";
+import {
+  isMenuMusicMuted, pauseMenuMusic, prepareMenuMusic, resumeMenuMusic, toggleMenuMusic,
+} from "../systems/music.js";
 
 function addCover(k, name) {
   if (!hasAsset(name)) return k.add([k.rect(k.width(), k.height()), k.color(...COLORS.night), k.fixed()]);
@@ -84,6 +86,14 @@ export function registerMenuScene(k) {
     const controls = createButton(k, {
       label: "CARA MAIN", pos: k.vec2(k.width() / 2, k.height() * 0.78), onPress: () => showControls(k),
     });
-    enableButtonNavigation(k, [start, controls]);
+    const music = createButton(k, {
+      label: isMenuMusicMuted() ? "MUSIK: MATI" : "MUSIK: NYALA",
+      pos: k.vec2(k.width() / 2, k.height() * 0.9),
+      onPress: () => {
+        const muted = toggleMenuMusic(k);
+        music.setLabel(muted ? "MUSIK: MATI" : "MUSIK: NYALA");
+      },
+    });
+    enableButtonNavigation(k, [start, controls, music]);
   });
 }

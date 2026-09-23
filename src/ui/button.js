@@ -20,7 +20,7 @@ export function createButton(k, options) {
     "uiButton",
     { focused: false, pressed: false, baseScale: 0.25 * uiScale },
   ]);
-  button.add([
+  const label = button.add([
     k.text(options.label, { size: 108, font: "pixelify" }),
     k.color(...COLORS.moon),
     k.outline(12, k.rgb(...COLORS.night)),
@@ -28,6 +28,7 @@ export function createButton(k, options) {
     k.pos(0, -8),
     k.z(1),
   ]);
+  button.setLabel = (value) => { label.text = value; };
   button.setFocused = (value) => { button.focused = value; };
   button.activate = () => {
     if (button.pressed) return;

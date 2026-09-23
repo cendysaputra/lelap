@@ -22,6 +22,9 @@ export const GHOST_BOB = 6;
 export const PEEKER_RANGE = 384;
 export const PEEKER_SPEED = 140;
 export const PEEKER_RETURN_SPEED = 80;
+export const PEEKER_OVERHEAD_RANGE = 96;
+export const PEEKER_OVERHEAD_HEIGHT = 80;
+export const PEEKER_LANDING_GRACE = 0.6;
 
 export const SHADOW_TRIGGER_RANGE = 96;
 export const SHADOW_WARN_TIME = 0.7;
@@ -33,6 +36,7 @@ export const PLAYER_LIGHT_RADIUS = 128;
 export const CLOSET_SAFE_DISTANCE = 64;
 export const GHOST_LAMP_BOUNDARY_MARGIN = 72;
 export const PLATFORM_COLLISION_HEIGHT = 24;
+export const PIT_EDGE_EXTENSION_PER_TILE = 8;
 
 export const MENU_BACKGROUND_SCALE = 1.012;
 export const MENU_BACKGROUND_SWAY_X = 3;

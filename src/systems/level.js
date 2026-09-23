@@ -1,5 +1,5 @@
-import { PLATFORM_COLLISION_HEIGHT, TILE } from "../config.js";
-import { assetData, decorCount, worldSprite } from "../manifest.js";
+import { PIT_EDGE_EXTENSION_PER_TILE, PLATFORM_COLLISION_HEIGHT, TILE } from "../config.js";
+import { assetData, decorCount, hasAsset, worldSprite } from "../manifest.js";
 import { validateLevel } from "../levels.js";
 
 const KNOWN = new Set(".#=mbkP123HL*fF");
@@ -45,6 +45,23 @@ function solidObject(k, asset, width = TILE) {
     k.pos(0, TILE), k.anchor("botleft"), k.area(),
     k.body({ isStatic: true }), k.z(6), "solid",
   ];
+}
+
+function addPitEdge(k, x, y, width, side, asset) {
+  const edge = k.add([
+    k.pos(x, y), k.rect(width, TILE), k.color(12, 10, 22),
+    k.area(), k.body({ isStatic: true }), k.z(6), "solid",
+  ]);
+  if (hasAsset(asset)) {
+    const start = side === "left" ? 1 - width / TILE : 0;
+    edge.add([
+      k.sprite(asset, {
+        quad: k.quad(start, 0, width / TILE, 1),
+        width: width * 4, height: TILE * 4,
+      }),
+      k.scale(0.25), k.z(1),
+    ]);
+  }
 }
 
 export function buildLevel(k, level, entities) {
@@ -99,6 +116,20 @@ export function buildLevel(k, level, entities) {
       "*": () => spawner(k, (pos) => entities.goal(pos.add(0, TILE))),
     },
     wildcardTile: (symbol) => { unknown.add(symbol); return null; },
+  });
+  level.map.forEach((line, y) => {
+    for (let x = 1; x < line.length - 1; x += 1) {
+      if (line[x] !== "." || line[x - 1] !== "#") continue;
+      let end = x;
+      while (line[end] === ".") end += 1;
+      if (line[end] !== "#") continue;
+      const width = PIT_EDGE_EXTENSION_PER_TILE * (end - x);
+      const leftAsset = level.map[y - 1]?.[x - 1] === "#" ? "tiles/fondasi" : "tiles/lantai";
+      const rightAsset = level.map[y - 1]?.[end] === "#" ? "tiles/fondasi" : "tiles/lantai";
+      addPitEdge(k, x * TILE, y * TILE, width, "left", leftAsset);
+      addPitEdge(k, end * TILE - width, y * TILE, width, "right", rightAsset);
+      x = end;
+    }
   });
   console.info(`Level "${level.name}": ${level.map[0].length}x${level.map.length} tile, spawn P, simbol tidak dikenal: ${[...unknown].join(", ") || "tidak ada"}.`);
   return size;
