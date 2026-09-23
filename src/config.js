@@ -14,8 +14,9 @@ export const WANDERER_PATROL_RANGE = 256;
 export const WANDERER_SIGHT_RANGE = 256;
 export const WANDERER_SIGHT_HEIGHT = 128;
 export const WANDERER_HEAR_RANGE = 256;
-export const WANDERER_ALERT_TIME = 0.8;
+export const WANDERER_ALERT_TIME = 0.4;
 export const WANDERER_LOSE_TIME = 2;
+export const WANDERER_LAMP_WAIT_TIME = 2;
 export const GHOST_BOB = 6;
 
 export const PEEKER_RANGE = 384;
@@ -30,9 +31,7 @@ export const SHADOW_COOLDOWN = 2;
 export const LAMP_RADIUS = 160;
 export const PLAYER_LIGHT_RADIUS = 128;
 export const CLOSET_SAFE_DISTANCE = 64;
-export const GHOST_LAMP_REPEL_MARGIN = 72;
-export const GHOST_LAMP_RETREAT_SPEED = 280;
-export const GHOST_LAMP_RETREAT_DISTANCE = 128;
+export const GHOST_LAMP_BOUNDARY_MARGIN = 72;
 export const PLATFORM_COLLISION_HEIGHT = 24;
 
 export const MENU_BACKGROUND_SCALE = 1.012;

@@ -1,6 +1,6 @@
 import { PEEKER_RANGE, PEEKER_RETURN_SPEED, PEEKER_SPEED } from "../config.js";
 import { hasAsset } from "../manifest.js";
-import { addGroundShadow, moveWithLampRepel, setVisualFrame } from "./shared.js";
+import { addGroundShadow, moveOutsideLamp, setVisualFrame } from "./shared.js";
 
 export function createPeeker(k, position) {
   const ghost = k.add([
@@ -21,28 +21,19 @@ export function createPeeker(k, position) {
     ghost.facing = Math.sign(dx) || ghost.facing;
     const playerFacesGhost = player.facing === Math.sign(ghost.pos.x - player.pos.x);
     ghost.moving = false;
-    const immediateRetreat = moveWithLampRepel(k, ghost, ghost.pos);
-    if (immediateRetreat.repelled) {
-      ghost.pos = immediateRetreat.position;
-      ghost.facing = Math.sign(immediateRetreat.direction.x) || ghost.facing;
-      ghost.moving = true;
-    } else if (player.isHidden) {
+    if (player.isHidden) {
       const delta = ghost.origin.sub(ghost.pos);
       if (delta.len() > 2) {
         const next = ghost.pos.add(delta.unit().scale(PEEKER_RETURN_SPEED * k.dt()));
-        const movement = moveWithLampRepel(k, ghost, next);
+        const movement = moveOutsideLamp(k, ghost, next);
         ghost.pos = movement.position;
-        if (movement.repelled) {
-          ghost.facing = Math.sign(movement.direction.x) || ghost.facing;
-          ghost.moving = true;
-        }
+        ghost.moving = !movement.blocked;
       }
     } else if (Math.abs(dx) <= PEEKER_RANGE && !playerFacesGhost) {
       const next = ghost.pos.add(k.vec2(ghost.facing * PEEKER_SPEED * k.dt(), 0));
-      const movement = moveWithLampRepel(k, ghost, next);
+      const movement = moveOutsideLamp(k, ghost, next);
       ghost.pos = movement.position;
-      if (movement.repelled) ghost.facing = Math.sign(movement.direction.x) || ghost.facing;
-      ghost.moving = true;
+      ghost.moving = !movement.blocked;
     }
     setVisualFrame(k, visual, ghost.moving ? "hantu/pengintai/maju" : "hantu/pengintai/diam");
     visual.scale.x = Math.abs(visual.scale.x) * ghost.facing;

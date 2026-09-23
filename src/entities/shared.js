@@ -1,7 +1,4 @@
-import {
-  COLORS, GHOST_LAMP_REPEL_MARGIN, GHOST_LAMP_RETREAT_DISTANCE,
-  GHOST_LAMP_RETREAT_SPEED, LAMP_RADIUS,
-} from "../config.js";
+import { COLORS, GHOST_LAMP_BOUNDARY_MARGIN, LAMP_RADIUS } from "../config.js";
 
 export function addGroundShadow(k, owner, radius = 28, offsetY = 2) {
   const shadow = k.add([
@@ -24,30 +21,13 @@ export function addGroundShadow(k, owner, radius = 28, offsetY = 2) {
   return shadow;
 }
 
-export function moveWithLampRepel(k, ghost, intended) {
+export function moveOutsideLamp(k, ghost, intended) {
   const current = ghost.pos;
-  const retreat = ghost.lampRetreat;
-  if (retreat && current.dist(retreat.lamp.pos) >= retreat.releaseRadius) {
-    ghost.lampRetreat = null;
-  }
-  const lamp = ghost.lampRetreat?.lamp ?? k.get("lamp").find((item) => {
-    const safeRadius = (item.radius ?? LAMP_RADIUS) + GHOST_LAMP_REPEL_MARGIN;
-    return current.dist(item.pos) < safeRadius || intended.dist(item.pos) < safeRadius;
+  const lamp = k.get("lamp").find((item) => {
+    const boundary = (item.radius ?? LAMP_RADIUS) + GHOST_LAMP_BOUNDARY_MARGIN;
+    return intended.dist(item.pos) < boundary && intended.dist(item.pos) <= current.dist(item.pos);
   });
-  if (!lamp) return { position: intended, repelled: false, direction: null };
-  if (!ghost.lampRetreat) {
-    ghost.lampRetreat = {
-      lamp,
-      direction: k.vec2(Math.sign(current.x - lamp.pos.x) || -ghost.facing || 1, 0),
-      releaseRadius: (lamp.radius ?? LAMP_RADIUS) + GHOST_LAMP_REPEL_MARGIN + GHOST_LAMP_RETREAT_DISTANCE,
-    };
-  }
-  const { direction } = ghost.lampRetreat;
-  return {
-    position: current.add(direction.scale(GHOST_LAMP_RETREAT_SPEED * k.dt())),
-    repelled: true,
-    direction,
-  };
+  return { position: lamp ? current : intended, blocked: Boolean(lamp), lamp };
 }
 
 export function setVisualFrame(k, visual, name) {
