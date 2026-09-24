@@ -3,6 +3,7 @@ import {
   WANDERER_HEAR_RANGE, WANDERER_LAMP_WAIT_TIME,
   WANDERER_LOSE_TIME, WANDERER_PATROL_RANGE,
   WANDERER_PATROL_SPEED, WANDERER_SIGHT_HEIGHT, WANDERER_SIGHT_RANGE,
+  WANDERER_ANIMATION_FPS,
 } from "../config.js";
 import { hasAsset } from "../manifest.js";
 import { addGroundShadow, moveOutsideLamp, setVisualFrame } from "./shared.js";
@@ -50,8 +51,9 @@ export function createWanderer(k, position) {
     if (!player || player.dead) return;
     const solids = ghost.solids ??= (k.get("level")[0]?.get("solid") ?? []);
     ghost.animationTime += k.dt();
-    const frame = Math.floor(ghost.animationTime * 4) % 2 + 1;
-    setVisualFrame(k, visual, `hantu/pengembara/melayang-${frame}`);
+    const frame = Math.floor(ghost.animationTime * WANDERER_ANIMATION_FPS) % 4 + 1;
+    const frameName = `hantu/pengembara/melayang-${frame}`;
+    if (hasAsset(frameName)) setVisualFrame(k, visual, frameName);
     visual.pos.y = Math.sin(k.time() * 2 + ghost.origin.x) * GHOST_BOB;
 
     const dx = player.pos.x - ghost.pos.x;

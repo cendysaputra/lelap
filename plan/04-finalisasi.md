@@ -15,6 +15,9 @@ Mainkan Level 1 dari menu sampai selesai minimal dua kali. Centang yang sudah be
 - [ ] MULAI masuk layar penuh; F menyalakan/mematikan layar penuh
 - [ ] Resize window atau keluar layar penuh tidak merusak tampilan
 - [ ] Panel CARA MAIN bisa dibuka dan ditutup
+- [ ] HUD atas tidak menutupi player: profil/stamina rata di kiri, timer di
+      tengah, dan tiga ikon boneka di kanan
+- [ ] Timer berhenti saat jeda dan lanjut kembali setelah LANJUT
 
 **Gambar**
 - [ ] Semua gambar tanpa latar berwarna dan tanpa kotak-kotak abu-abu
@@ -42,7 +45,8 @@ Mainkan Level 1 dari menu sampai selesai minimal dua kali. Centang yang sudah be
 - [ ] Jatuh ke jurang → panel "JATUH KE KEGELAPAN"
 - [ ] ULANG memulai level dari awal dengan semua hantu di posisi awal
 - [ ] P membuka jeda; LANJUT melanjutkan, MENU kembali ke menu
-- [ ] Menyentuh boneka → layar menang
+- [ ] Setiap boneka mengubah satu ikon grayscale menjadi warna asli
+- [ ] Tiga boneka terkumpul → portal muncul; menyentuh portal → layar menang
 - [ ] Tidak ada cara terjebak (tempat yang tidak bisa dilompati keluar)
 
 **Rasa**
@@ -126,3 +130,39 @@ Level 1 siap deploy kalau:
 - Sudah dicoba di minimal dua browser (misalnya Chrome dan Firefox atau Edge).
 
 Deploy ke Vercel kamu urus sendiri. Output build ada di folder `dist/`.
+
+---
+
+## Status eksekusi — 24 September 2026
+
+Pemeriksaan otomatis yang sudah selesai:
+
+- [x] `npm run assets`: 57 aset diproses, tanpa file dilewati dan tanpa
+      peringatan.
+- [x] Log informasi level yang tidak diperlukan sudah dihapus; warning aset,
+      fallback manifest, fullscreen, dan simbol level tetap dipertahankan.
+- [x] Seluruh file JavaScript/CSS berada di bawah sekitar 200 baris.
+- [x] README memuat langkah install, assets, dev, build, preview, dan kontrol.
+- [x] `npm run build` berhasil tanpa error.
+- [x] `npm run preview` aktif dan halaman, bundle, manifest, emblem, serta ikon
+      boneka merespons HTTP 200.
+- [x] Semua 57 entri manifest tersedia di dalam hasil build.
+- [x] Ukuran `dist/`: 37.798.974 byte (36,05 MiB).
+
+Lima file terbesar di `dist/`:
+
+| File | Ukuran |
+|---|---:|
+| `bg/title-asap.png` | 5.942.598 byte |
+| `music/deep-pulse.mp3` | 5.333.611 byte |
+| `ui/logo.png` | 3.838.284 byte |
+| `ui/panel.png` | 2.891.252 byte |
+| `ui/game-over/game-over-ditelan-bayangan.png` | 2.773.659 byte |
+
+Pemeriksaan yang tetap harus dilakukan manual:
+
+- [ ] Mainkan Level 1 sampai selesai dua kali.
+- [ ] Ulangi pemeriksaan visual dan kontrol di minimal dua browser.
+
+`agent-browser` tidak tersedia di environment saat status ini dibuat, sehingga
+dua pemeriksaan manual tersebut sengaja tidak ditandai selesai.

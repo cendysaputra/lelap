@@ -83,13 +83,23 @@
     },
     "hantu/pengembara/melayang-1": {
       "file": "hantu/pengembara/melayang-1.png",
-      "width": 80.75,
+      "width": 80,
       "height": 72
     },
     "hantu/pengembara/melayang-2": {
       "file": "hantu/pengembara/melayang-2.png",
-      "width": 81.75,
-      "height": 85.5
+      "width": 77.25,
+      "height": 72.25
+    },
+    "hantu/pengembara/melayang-3": {
+      "file": "hantu/pengembara/melayang-3.png",
+      "width": 80.5,
+      "height": 72.75
+    },
+    "hantu/pengembara/melayang-4": {
+      "file": "hantu/pengembara/melayang-4.png",
+      "width": 80,
+      "height": 72.25
     },
     "hantu/pengintai/diam": {
       "file": "hantu/pengintai/diam.png",
@@ -116,6 +126,21 @@
       "width": 69,
       "height": 128
     },
+    "objek/portal/portal-1": {
+      "file": "objek/portal/portal-1.png",
+      "width": 91.75,
+      "height": 128
+    },
+    "objek/portal/portal-2": {
+      "file": "objek/portal/portal-2.png",
+      "width": 92.25,
+      "height": 128
+    },
+    "objek/portal/portal-3": {
+      "file": "objek/portal/portal-3.png",
+      "width": 92.25,
+      "height": 128
+    },
     "pijakan/buku": {
       "file": "pijakan/buku.png",
       "width": 64,
@@ -126,10 +151,35 @@
       "width": 64,
       "height": 29
     },
+    "pijakan/lane-vertikal/modul-pendek": {
+      "file": "pijakan/lane-vertikal/modul-pendek.png",
+      "width": 128,
+      "height": 50.75
+    },
+    "pijakan/lane-vertikal/modul-penghubung": {
+      "file": "pijakan/lane-vertikal/modul-penghubung.png",
+      "width": 192,
+      "height": 39
+    },
+    "pijakan/lane-vertikal/modul-sedang": {
+      "file": "pijakan/lane-vertikal/modul-sedang.png",
+      "width": 128,
+      "height": 67.75
+    },
+    "pijakan/lane-vertikal/modul-tinggi": {
+      "file": "pijakan/lane-vertikal/modul-tinggi.png",
+      "width": 128,
+      "height": 159.75
+    },
     "pijakan/meja": {
       "file": "pijakan/meja.png",
       "width": 128,
       "height": 117.75
+    },
+    "pijakan/pijakan-atas-tinggi": {
+      "file": "pijakan/pijakan-atas-tinggi.png",
+      "width": 128,
+      "height": 51.75
     },
     "pijakan/rak": {
       "file": "pijakan/rak.png",
@@ -206,15 +256,40 @@
       "width": 256,
       "height": 56.75
     },
+    "ui/emblem-player": {
+      "file": "ui/emblem-player.png",
+      "width": 64,
+      "height": 70.25
+    },
+    "ui/game-over/game-over-ditelan-bayangan": {
+      "file": "ui/game-over/game-over-ditelan-bayangan.png",
+      "width": 400,
+      "height": 306
+    },
+    "ui/game-over/game-over-jatuh": {
+      "file": "ui/game-over/game-over-jatuh.png",
+      "width": 400,
+      "height": 378
+    },
+    "ui/game-over/game-over-tertangkap-pengembara": {
+      "file": "ui/game-over/game-over-tertangkap-pengembara.png",
+      "width": 400,
+      "height": 261.75
+    },
     "ui/logo": {
       "file": "ui/logo.png",
       "width": 600,
-      "height": 221.5
+      "height": 228.25
     },
     "ui/panel": {
       "file": "ui/panel.png",
       "width": 680,
       "height": 294.5
+    },
+    "ui/boneka-grayscale": {
+      "file": "ui/boneka-grayscale.png",
+      "width": 52.25,
+      "height": 56
     }
   },
   "music": {

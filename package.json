@@ -6,7 +6,8 @@
   "scripts": {
     "dev": "vite",
     "assets": "node tools/assets.js",
-    "build": "vite build"
+    "build": "vite build",
+    "preview": "vite preview"
   },
   "dependencies": {
     "kaplay": "^3001.0.19"

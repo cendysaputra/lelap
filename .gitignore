@@ -35,3 +35,11 @@ Desktop.ini
 
 # Tangkapan layar diagnostik lokal
 *-check.png
+
+# Profil browser sementara untuk verifikasi lokal
+.tmp-*-verify/
+
+# Instruksi agent lokal (bukan bagian aplikasi)
+AGENT.md
+AGENTS.md
+CLAUDE.md

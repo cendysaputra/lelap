@@ -10,7 +10,7 @@
 
 LELAP adalah game platformer dua dimensi dengan tampilan samping dan gaya pixel art. Ceritanya mengikuti seorang anak kecil yang terperangkap di dalam mimpi. Rumah yang ia kenal telah berubah menjadi lorong gelap yang mustahil, dipenuhi bayangan hidup, hantu, perabot tua, dan cahaya bulan yang terasa dingin.
 
-Di dalam mimpi ini tidak ada senjata dan tidak ada perlawanan. Sang anak hanya dapat berjalan, berlari, melompat, bersembunyi, dan mencari tempat yang masih diterangi cahaya. Di ujung mimpi, boneka beruang kesayangannya menunggu untuk ditemukan.
+Di dalam mimpi ini tidak ada senjata dan tidak ada perlawanan. Sang anak hanya dapat berjalan, berlari, melompat, bersembunyi, dan mencari tempat yang masih diterangi cahaya. Ia harus menemukan tiga boneka beruang agar portal keluar dari mimpi buruk muncul.
 
 <div align="center">
   <img src="assets-src/player/idle.png" alt="Karakter utama LELAP" height="220">
@@ -98,6 +98,26 @@ Ketiganya mengikuti aturan yang sama terhadap cahaya. Tidak ada hantu yang dapat
 | `P` | Menjeda permainan |
 | `F` | Mengaktifkan atau menonaktifkan layar penuh |
 
+## Menjalankan proyek
+
+Proyek membutuhkan Node.js dan npm. Setelah repository tersedia secara lokal:
+
+```bash
+npm install
+npm run assets
+npm run dev
+```
+
+`npm run assets` memproses sumber gambar dari `assets-src/` ke `public/` dan
+memperbarui manifest. Untuk membuat versi production:
+
+```bash
+npm run build
+npm run preview
+```
+
+Hasil build production berada di folder `dist/`.
+
 ## Dunia yang bergerak seperti mimpi
 
 Visual LELAP menggunakan pixel art dengan warna malam berupa indigo, ungu berdebu, dan biru cahaya bulan. Warna kuning pada piyama anak serta cahaya jingga dari lampu menjadi penunjuk visual di tengah lingkungan yang gelap. Suasananya menyeramkan tanpa kekerasan grafis, sehingga rasa takut lahir dari siluet, ruang kosong, gerakan, dan sesuatu yang mungkin bersembunyi di luar cahaya.
@@ -116,10 +136,10 @@ Seluruh angka yang memengaruhi rasa permainan ditempatkan dalam konfigurasi terp
 
 ## Arah pengembangan
 
-Fokus proyek saat ini sepenuhnya berada pada penyelesaian **Mimpi Buruk** sebagai pengalaman singkat yang utuh. Tujuannya adalah menghadirkan perjalanan sekitar dua menit yang tetap terasa tegang, mudah dipahami, dan adil. Setiap ancaman harus memberi tanda sebelum menyerang, setiap kegagalan harus dapat dipelajari, dan jalan menuju boneka beruang harus terasa seperti keberanian kecil di tengah mimpi yang besar.
+Fokus proyek saat ini sepenuhnya berada pada penyelesaian **Mimpi Buruk** sebagai pengalaman singkat yang utuh. Tujuannya adalah menghadirkan perjalanan sekitar dua menit yang tetap terasa tegang, mudah dipahami, dan adil. Setiap ancaman harus memberi tanda sebelum menyerang, setiap kegagalan harus dapat dipelajari, dan perjalanan mengumpulkan tiga boneka menuju portal harus terasa seperti keberanian kecil di tengah mimpi yang besar.
 
 <div align="center">
   <img src="assets-src/objek/boneka.png" alt="Boneka beruang di ujung mimpi" height="220">
 
-  <p><strong>Temukan beruangmu. Bangun dari mimpi buruk.</strong></p>
+  <p><strong>Temukan ketiga boneka. Buka jalan keluar dari mimpi buruk.</strong></p>
 </div>

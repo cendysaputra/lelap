@@ -4,6 +4,22 @@ Kirim ke agent satu prompt per sesi, berurutan. Setelah tiap tahap: `npm run dev
 
 Selama gambar belum ada, semua objek tampil sebagai kotak warna — itu normal.
 
+## Revisi aktif — 24 September 2026
+
+- Kecepatan lari diturunkan menjadi 340 unit/detik agar tetap lebih cepat
+  dari jalan, tetapi tidak melompati terlalu banyak tantangan level.
+- HUD atas memakai aset `ui/emblem-player`, nama Cendi, dan bar stamina ringkas
+  di kiri; timer di tengah; serta tiga ikon boneka yang lebih besar di kanan.
+  Ikon belum ditemukan tampil grayscale dan ikon yang ditemukan kembali ke
+  warna asli.
+- Level 1 memakai lane bawah dan lane tinggi yang panjang. Lane tinggi dibentuk
+  dari modul vertikal solid yang berdiri dari dasar, bukan kumpulan tanah
+  melayang atau platform tipis yang dapat ditembus dari samping.
+- Ada tiga boneka. Portal akhir baru terlihat dan aktif setelah semuanya
+  ditemukan.
+- Pengembara memakai empat frame `melayang-1` sampai `melayang-4` pada
+  10 fps agar animasi aset terbaru terbaca halus.
+
 ---
 
 ## Tahap 0 — Setup & pemroses aset
@@ -72,7 +88,7 @@ Baca AGENTS.md dulu, terutama "Layar" dan "Teks & UI". Kerjakan:
 
 2. src/config.js isi awal:
    TILE = 64, VIEW_HEIGHT = 768,
-   GRAVITY = 3600, WALK_SPEED = 220, RUN_SPEED = 440, JUMP_FORCE = 1040,
+   GRAVITY = 3600, WALK_SPEED = 220, RUN_SPEED = 340, JUMP_FORCE = 1040,
    COYOTE_TIME = 0.1, STAMINA_MAX = 2.5, STAMINA_REGEN_TIME = 3
 
 3. src/manifest.js: muat public/manifest.json dan semua gambarnya dengan
@@ -139,16 +155,23 @@ Baca AGENTS.md dulu, terutama "Level", "Suasana", dan "Animasi". Kerjakan:
    - Hitbox sekitar 36x56, lebih kecil dari gambar.
    - Jatuh keluar peta: scene gameover dengan penyebab "JATUH KE
      KEGELAPAN".
-   - Bar stamina kecil di atas kepala, hanya muncul saat tidak penuh.
+   - HUD kiri atas memakai aset emblem player, nama Cendi, dan bar stamina
+     ringkas yang rata tengah. Jangan tampilkan bar stamina kedua di atas
+     kepala player. Timer permainan berada di tengah atas dan berhenti saat
+     jeda.
+   - Tampilkan tiga ikon boneka berukuran jelas di kanan atas: grayscale
+     sebelum ditemukan dan warna asli setelah ditemukan.
    - Animasi frame sesuai tabel "Animasi" di AGENTS.md: idle, jalan-1/2
      (6 fps jalan, 10 fps lari), lompat. Flip horizontal sesuai arah,
      squash & stretch saat lompat dan mendarat. Semua frame jangkar rata
      bawah-tengah.
    - Bayangan elips tipis di bawah kaki.
 
-6. src/levels.js: satu level uji sekitar 50 tile panjang, 12 tile tinggi,
+6. src/levels.js: satu level uji sampai 96 tile panjang, 12 tile tinggi,
    dengan lantai, satu jurang kecil, rak, meja, buku, kotak, dan beberapa
-   f dan F.
+   f dan F. Siapkan juga lane tinggi yang tersambung dan dapat dinaiki lewat
+   beberapa tingkat modul. Modul tinggi memiliki collider solid penuh agar
+   membentuk elevasi medan, bukan sekadar pijakan tanah yang melayang.
 
 7. Scene gameover menerima penyebab sebagai parameter, tampil di panel
    dengan tombol ULANG dan MENU.
@@ -192,8 +215,8 @@ Kerjakan:
      menoleh.
    - Tidak melihat player selama LOSE_TIME: kembali ke ketinggian dan jalur
      patroli awal.
-   - Animasi melayang-1/2 bergantian 4 fps, plus naik-turun GHOST_BOB unit
-     dengan gelombang sinus.
+   - Animasi melayang-1 sampai melayang-4 bergantian 10 fps, plus naik-turun
+     GHOST_BOB unit dengan gelombang sinus.
 
 3. Pengintai (src/entities/pengintai.js):
    - Diam di titik awal (frame diam).
@@ -246,9 +269,11 @@ Baca AGENTS.md dulu, lalu kerjakan:
    Pengembara dan pengintai tidak bisa masuk ke dalamnya — berhenti di
    tepinya. Lampu berkedip sangat halus sesekali.
 
-4. Boneka beruang: menyentuhnya menyelesaikan level. Fade, lalu scene win
-   dengan panel "Kamu menemukan Beruang. Mimpi buruk berakhir..." dan
-   tombol MENU. Boneka melayang naik-turun pelan dengan kilau kecil.
+4. Boneka beruang dan portal: tempatkan tiga boneka di rute berbeda.
+   Menyentuh boneka menambah progres HUD dan mengubah satu ikon grayscale
+   menjadi warna asli. Setelah ketiganya ditemukan, munculkan dan aktifkan
+   portal keluar. Menyentuh portal melakukan fade ke scene win. Boneka
+   melayang naik-turun pelan dengan kilau kecil.
 
 5. src/systems/darkness.js sesuai bagian "Suasana" di AGENTS.md: vignette
    gelap di tepi layar, cahaya lembut di sekitar player (PLAYER_LIGHT_RADIUS)
@@ -261,19 +286,24 @@ Baca AGENTS.md dulu, lalu kerjakan:
      gerak.
    - Pengembara pertama dengan 1 lemari di dekatnya — belajar sembunyi.
    - Jurang kecil dan pijakan rak/meja — belajar melompat.
+   - Beberapa bagian beralih ke lane tinggi yang panjang, ditopang modul
+     vertikal dari dasar. Jurang di bawahnya membuat lane tinggi menjadi
+     bagian rute, bukan dekorasi opsional atau tanah melayang.
    - Bayangan di lorong sempit — belajar mengatur waktu.
    - Pengintai di area terbuka yang panjang — belajar berjalan sambil
      menoleh ke belakang.
    - Akhir: 2 pengembara dan 1 bayangan sekaligus, 1 lemari dan 1 lampu
-     sebagai penyelamat, lalu boneka beruang.
+     sebagai penyelamat, boneka terakhir, lalu portal keluar.
    Buku dan kotak tidak boleh melayang. Dekor tersebar tanpa menutupi
    lemari atau jalur penting.
 
 7. Fade singkat antar semua scene.
 
-Selesai kalau: Level 1 bisa dimainkan dari menu sampai layar menang, tiap
-hantu punya bagian yang mengajarkan cara menghindarinya, lemari dan lampu
-benar-benar menyelamatkan, dan suasananya gelap tapi semua tetap terbaca.
+Selesai kalau: Level 1 bisa dimainkan dari menu sampai layar menang setelah
+tiga boneka ditemukan dan portal dimasuki, perpindahan lane bawah/tinggi bisa
+dilalui, tiap hantu punya bagian yang mengajarkan cara menghindarinya, lemari
+dan lampu benar-benar menyelamatkan, dan suasananya gelap tapi semua tetap
+terbaca.
 ```
 
 ---

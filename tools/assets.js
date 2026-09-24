@@ -2,50 +2,9 @@ import fs from "node:fs/promises";
 import path from "node:path";
 import sharp from "sharp";
 import { buildAnimatedBackground } from "./animated-background.js";
+import { expected, fixedRules, groups, OUTPUT, SCALE, SOURCE } from "./asset-config.js";
 import { copyMusicAsset } from "./audio-assets.js";
 import { buildFavicon } from "./favicon.js";
-
-const SOURCE = path.resolve("assets-src");
-const OUTPUT = path.resolve("public");
-const SCALE = 4;
-
-const expected = [
-  "favicon.png", "bg/title.png", "bg/title-asap.webp", "ui/logo.png", "ui/button.png", "ui/panel.png",
-  "music/deep-pulse.mp3",
-  "player/idle.png", ...Array.from({ length: 8 }, (_, index) => `player/jalan-${index + 1}.png`),
-  "player/lompat.png", "player/sembunyi.png",
-  "hantu/pengembara/melayang-1.png", "hantu/pengembara/melayang-2.png",
-  "hantu/pengintai/diam.png", "hantu/pengintai/maju.png",
-  "hantu/bayangan/muncul.png", "hantu/bayangan/sembunyi.png",
-  "objek/lemari.png", "objek/lampu.png", "objek/boneka.png",
-  "pijakan/rak.png", "pijakan/meja.png", "pijakan/buku.png",
-  "pijakan/kotak.png", "tiles/lantai.png", "tiles/fondasi.png",
-  "bg/far.png", "bg/mid.png", "bg/near.png",
-];
-
-const fixedRules = [
-  [/^player\//, "height", 64],
-  [/^hantu\/pengembara\//, "height", 72],
-  [/^hantu\/pengintai\//, "height", 112],
-  [/^hantu\/bayangan\//, "height", 128],
-  [/^objek\/lemari\.png$/, "height", 128],
-  [/^objek\/lampu\.png$/, "height", 96],
-  [/^objek\/boneka\.png$/, "height", 56],
-  [/^pijakan\/(rak|meja)\.png$/, "width", 128],
-  [/^pijakan\/(buku|kotak)\.png$/, "width", 64],
-  [/^dekor\/kecil-\d+\.png$/, "height", 48],
-  [/^dekor\/besar-\d+\.png$/, "height", 128],
-  [/^ui\/logo\.png$/, "width", 600],
-  [/^ui\/button\.png$/, "width", 256],
-  [/^ui\/panel\.png$/, "width", 680],
-];
-
-const groups = [
-  { prefix: "player/", reference: "player/idle.png" },
-  { prefix: "hantu/pengembara/", reference: "hantu/pengembara/melayang-1.png" },
-  { prefix: "hantu/pengintai/", reference: "hantu/pengintai/diam.png" },
-  { prefix: "hantu/bayangan/", reference: "hantu/bayangan/muncul.png" },
-];
 
 const manifest = { assets: {}, music: {}, decor: { kecil: 0, besar: 0 } };
 let processed = 0;
@@ -164,6 +123,23 @@ async function processSprite(file, name, scales) {
   if (/^dekor\/besar-/.test(name)) manifest.decor.besar += 1;
 }
 
+async function buildHudBear() {
+  const source = path.join(OUTPUT, "objek/boneka.png");
+  const outputName = "ui/boneka-grayscale.png";
+  const target = path.join(OUTPUT, outputName);
+  try {
+    await fs.mkdir(path.dirname(target), { recursive: true });
+    const info = await sharp(source).grayscale().png({ compressionLevel: 9 }).toFile(target);
+    manifest.assets["ui/boneka-grayscale"] = {
+      file: outputName,
+      width: info.width / SCALE,
+      height: info.height / SCALE,
+    };
+  } catch (error) {
+    warn(`ui/boneka-grayscale.png: gagal dibuat (${error.message})`);
+  }
+}
+
 async function main() {
   await fs.mkdir(OUTPUT, { recursive: true });
   const files = await walk(SOURCE);
@@ -196,6 +172,7 @@ async function main() {
     }
     processed += 1;
   }
+  await buildHudBear();
   await fs.writeFile(path.join(OUTPUT, "manifest.json"), `${JSON.stringify(manifest, null, 2)}\n`);
   console.log(`Selesai: ${processed} diproses, ${skipped} dilewati, ${warnings} peringatan.`);
 }

@@ -11,6 +11,8 @@ import { createShadow } from "../entities/bayangan.js";
 import { createCloset } from "../entities/lemari.js";
 import { createLamp } from "../entities/lampu.js";
 import { createGoal } from "../entities/goal.js";
+import { createPortal } from "../entities/portal.js";
+import { createHud } from "../ui/hud.js";
 import { createButton, enableButtonNavigation } from "../ui/button.js";
 import { createPanel } from "../ui/panel.js";
 import { addGameText } from "../ui/text.js";
@@ -31,11 +33,13 @@ export function registerGameScene(k) {
       closet: (position) => createCloset(k, position),
       lamp: (position) => createLamp(k, position),
       goal: (position) => createGoal(k, position),
+      portal: (position) => createPortal(k, position),
     });
     if (!player) throw new Error("Level tidak memiliki posisi awal player (P).");
     const cameraX = createCamera(k, player, levelSize);
     createBackground(k, cameraX);
     createDarkness(k, player);
+    createHud(k, player);
 
     let paused = false;
     let pauseItems = [];

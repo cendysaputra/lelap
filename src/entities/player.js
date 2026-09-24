@@ -1,5 +1,5 @@
 import {
-  COYOTE_TIME, JUMP_FORCE, RUN_SPEED, STAMINA_MAX,
+  BEARS_REQUIRED, COYOTE_TIME, JUMP_FORCE, RUN_SPEED, STAMINA_MAX,
   STAMINA_REGEN_TIME, WALK_SPEED,
 } from "../config.js";
 import { hasAsset } from "../manifest.js";
@@ -17,21 +17,13 @@ export function createPlayer(k, position, worldHeight) {
     "player", "gameplay",
     {
       facing: 1, stamina: STAMINA_MAX, runLocked: false, isRunning: false,
-      isHidden: false, dead: false, coyote: 0, animationTime: 0, landingTime: 0,
+      isHidden: false, dead: false, coyote: 0, animationTime: 0, landingTime: 0, bears: 0,
     },
   ]);
   const visual = player.add([
     hasAsset("player/idle") ? k.sprite("player/idle") : k.rect(36, 64),
     k.anchor("bot"), k.scale(0.25), k.pos(0, 0), k.opacity(1),
     { currentFrame: "player/idle" },
-  ]);
-  const staminaBack = player.add([
-    k.rect(44, 6, { radius: 3 }), k.pos(-22, -76),
-    k.color(21, 19, 38), k.opacity(0), k.z(2),
-  ]);
-  const staminaBar = player.add([
-    k.rect(42, 4, { radius: 2 }), k.pos(-21, -75),
-    k.color(246, 208, 77), k.opacity(0), k.z(3),
   ]);
   addGroundShadow(k, player, 24);
 
@@ -66,13 +58,20 @@ export function createPlayer(k, position, worldHeight) {
     }
   });
   player.onCollide("ghost", (ghost) => {
-    if (ghost.dangerous && !player.isHidden && !player.inLampLight()) player.kill("TERTANGKAP");
-  });
-  player.onCollide("goal", () => {
-    if (!player.dead) {
-      player.dead = true;
-      fadeTo(k, "win");
+    if (ghost.dangerous && !player.isHidden && !player.inLampLight()) {
+      player.kill(ghost.is("shadowGhost") ? "DITELAN BAYANGAN" : "TERTANGKAP");
     }
+  });
+  player.onCollide("goal", (bear) => {
+    if (player.dead || player.isHidden || !bear.exists()) return;
+    k.destroy(bear);
+    player.bears += 1;
+    if (player.bears >= BEARS_REQUIRED) k.get("portal").forEach((portal) => portal.activate());
+  });
+  player.onCollide("portal", (portal) => {
+    if (player.dead || !portal.active || player.bears < BEARS_REQUIRED) return;
+    player.dead = true;
+    fadeTo(k, "win");
   });
 
   player.onUpdate(() => {
@@ -114,10 +113,6 @@ export function createPlayer(k, position, worldHeight) {
     setVisualFrame(k, visual, frame);
     const stretchY = !grounded ? 1.08 : player.landingTime > 0 ? 0.9 : 1;
     visual.scale = k.vec2(0.25 * player.facing / stretchY, 0.25 * stretchY);
-    const showStamina = player.stamina < STAMINA_MAX;
-    staminaBack.opacity = showStamina ? 0.8 : 0;
-    staminaBar.opacity = showStamina ? 1 : 0;
-    staminaBar.width = 42 * player.stamina / STAMINA_MAX;
     if (player.pos.y > worldHeight + 128) player.kill("JATUH KE KEGELAPAN");
   });
   return player;

@@ -2,7 +2,7 @@ import { PIT_EDGE_EXTENSION_PER_TILE, PLATFORM_COLLISION_HEIGHT, TILE } from "..
 import { assetData, decorCount, hasAsset, worldSprite } from "../manifest.js";
 import { validateLevel } from "../levels.js";
 
-const KNOWN = new Set(".#=mbkP123HL*fF");
+const KNOWN = new Set(".#=mbksvtcaP123HLO*fF");
 const hash = (x, y) => Math.abs(((x * 73856093) ^ (y * 19349663)) >>> 0);
 
 function spawner(k, callback) {
@@ -36,6 +36,16 @@ function platform(k, asset, width) {
         ]);
       },
     },
+  ];
+}
+
+function raisedLane(k, asset, width) {
+  const height = assetData(asset)?.height ?? TILE * 2.5;
+  return [
+    ...worldSprite(k, asset, { width, height }),
+    k.pos(0, TILE - height), k.anchor("topleft"),
+    k.area({ shape: new k.Rect(k.vec2(0, 0), width, height) }),
+    k.body({ isStatic: true }), k.z(5), "solid",
   ];
 }
 
@@ -104,6 +114,11 @@ export function buildLevel(k, level, entities) {
       ".": () => null, "#": floorTile,
       "=": () => platform(k, "pijakan/rak", TILE * 2),
       "m": () => platform(k, "pijakan/meja", TILE * 2),
+      "s": () => platform(k, "pijakan/lane-vertikal/modul-pendek", TILE * 2),
+      "v": () => platform(k, "pijakan/lane-vertikal/modul-sedang", TILE * 2),
+      "t": () => raisedLane(k, "pijakan/lane-vertikal/modul-tinggi", TILE * 2),
+      "c": () => platform(k, "pijakan/lane-vertikal/modul-penghubung", TILE * 3),
+      "a": () => platform(k, "pijakan/pijakan-atas-tinggi", TILE * 2),
       "b": () => solidObject(k, "pijakan/buku"),
       "k": () => solidObject(k, "pijakan/kotak"),
       "f": decor("kecil"), "F": decor("besar"),
@@ -114,6 +129,7 @@ export function buildLevel(k, level, entities) {
       "H": () => spawner(k, (pos) => entities.closet(pos.add(0, TILE))),
       "L": () => spawner(k, (pos) => entities.lamp(pos.add(0, TILE))),
       "*": () => spawner(k, (pos) => entities.goal(pos.add(0, TILE))),
+      "O": () => spawner(k, (pos) => entities.portal(pos.add(0, TILE))),
     },
     wildcardTile: (symbol) => { unknown.add(symbol); return null; },
   });
@@ -131,6 +147,5 @@ export function buildLevel(k, level, entities) {
       x = end;
     }
   });
-  console.info(`Level "${level.name}": ${level.map[0].length}x${level.map.length} tile, spawn P, simbol tidak dikenal: ${[...unknown].join(", ") || "tidak ada"}.`);
   return size;
 }
