@@ -97,6 +97,15 @@ export const MENU_GLOW_LAYERS = [
   { scale: 0.3, opacity: 0.075 },
 ];
 
+export const GAME_OVER_PANEL_SCALE = 1.65;
+export const GAME_OVER_PANEL_MARGIN = 32;
+export const GAME_OVER_ART_MAX_WIDTH = 320;
+export const GAME_OVER_ART_MAX_HEIGHT = 250;
+export const GAME_OVER_TITLE_Y = 0.22;
+export const GAME_OVER_ART_Y = 0.42;
+export const GAME_OVER_RETRY_Y = 0.68;
+export const GAME_OVER_MENU_Y = 0.79;
+
 export const COLORS = {
   night: [21, 19, 38],
   shadow: [43, 36, 70],
