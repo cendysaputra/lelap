@@ -100,11 +100,11 @@ export const MENU_GLOW_LAYERS = [
 export const GAME_OVER_PANEL_SCALE = 1.65;
 export const GAME_OVER_PANEL_MARGIN = 32;
 export const GAME_OVER_ART_MAX_WIDTH = 320;
-export const GAME_OVER_ART_MAX_HEIGHT = 250;
-export const GAME_OVER_TITLE_Y = 0.22;
-export const GAME_OVER_ART_Y = 0.42;
-export const GAME_OVER_RETRY_Y = 0.68;
-export const GAME_OVER_MENU_Y = 0.79;
+export const GAME_OVER_ART_MAX_HEIGHT = 240;
+export const GAME_OVER_ART_Y = 0.36;
+export const GAME_OVER_TITLE_Y = 0.57;
+export const GAME_OVER_BUTTON_Y = 0.71;
+export const GAME_OVER_BUTTON_OFFSET = 145;
 
 export const COLORS = {
   night: [21, 19, 38],
