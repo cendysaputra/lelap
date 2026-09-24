@@ -7,6 +7,7 @@ import { registerMenuScene } from "./scenes/menu.js";
 import { registerGameScene } from "./scenes/game.js";
 import { registerGameOverScene } from "./scenes/gameover.js";
 import { registerWinScene } from "./scenes/win.js";
+import { toggleFullscreen } from "./scenes/shared.js";
 
 const k = kaplay({
   background: [10, 9, 20],
@@ -23,13 +24,16 @@ registerGameScene(k);
 registerGameOverScene(k);
 registerWinScene(k);
 
-k.onKeyPress("f", async () => {
-  try { await k.setFullscreen(!k.isFullscreen()); }
-  catch (error) { console.warn("Layar penuh tidak tersedia.", error); }
+window.addEventListener("keydown", async (event) => {
+  if (event.code !== "KeyF" || event.repeat) return;
+  await toggleFullscreen(k);
 });
 
-k.onResize(() => {
+const updateScale = () => {
   document.documentElement.style.setProperty("--world-scale", String(k.height() / VIEW_HEIGHT));
-});
+};
+window.addEventListener("resize", updateScale);
+document.addEventListener("fullscreenchange", updateScale);
+updateScale();
 
 k.go("loading");

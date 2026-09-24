@@ -8,6 +8,7 @@ import {
 } from "../config.js";
 import { assetData, hasAsset } from "../manifest.js";
 import { fadeTo } from "./shared.js";
+import { makeResponsive } from "../ui/responsive.js";
 
 const ILLUSTRATIONS = {
   "DITELAN BAYANGAN": "ui/game-over/game-over-ditelan-bayangan",
@@ -20,14 +21,14 @@ function addDefeatIllustration(k, reason) {
   if (!hasAsset(name)) return null;
   const data = assetData(name);
   const fit = Math.min(GAME_OVER_ART_MAX_WIDTH / data.width, GAME_OVER_ART_MAX_HEIGHT / data.height);
-  return k.add([
+  return makeResponsive(k, k.add([
     k.sprite(name),
     k.pos(k.width() / 2, k.height() * GAME_OVER_ART_Y),
     k.anchor("center"),
     k.scale(0.25 * (k.height() / VIEW_HEIGHT) * fit),
     k.fixed(),
     k.z(90),
-  ]);
+  ]));
 }
 
 export function registerGameOverScene(k) {

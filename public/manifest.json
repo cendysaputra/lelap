@@ -292,6 +292,11 @@
       "height": 56
     }
   },
+  "fonts": {
+    "pixelify": {
+      "file": "fonts/PixelifySans.ttf"
+    }
+  },
   "music": {
     "music/deep-pulse": {
       "file": "music/deep-pulse.mp3"

@@ -109,6 +109,7 @@ export function createHud(k, player) {
     bearIcons.forEach((icon, index) => {
       if (icon.collected || index >= player.bears || !hasAsset("objek/boneka")) return;
       icon.use(k.sprite("objek/boneka"));
+      icon.use(k.scale(HUD_BEAR_SIZE * scale / (assetData("objek/boneka").height * 4)));
       icon.opacity = 1;
       icon.collected = true;
     });

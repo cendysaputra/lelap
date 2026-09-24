@@ -1,7 +1,8 @@
+import { lampCenter } from "../entities/shared.js";
 import {
   COLORS, DARKNESS_COLOR, DARKNESS_FEATHER_STEPS, DARKNESS_INNER_LIGHT_SCALE,
   DARKNESS_OPACITY, DARKNESS_OUTER_LIGHT_SCALE, LAMP_GLOW_OPACITY, LAMP_RADIUS,
-  PLAYER_LIGHT_RADIUS, VIEW_HEIGHT, VIGNETTE_INNER_RADIUS,
+  PLAYER_LIGHT_RADIUS, PLAYER_LIGHT_OFFSET_Y, VIEW_HEIGHT, VIGNETTE_INNER_RADIUS,
   VIGNETTE_OUTER_RADIUS, VIGNETTE_STEP_OPACITY, VIGNETTE_STEPS,
 } from "../config.js";
 
@@ -63,8 +64,8 @@ export function createDarkness(k, player) {
       id: "darkness",
       draw() {
         const uiScale = k.height() / VIEW_HEIGHT;
-        const playerScreen = k.toScreen(player.pos.add(0, -32));
-        const lamps = k.get("lamp").map((lamp) => k.toScreen(lamp.pos.add(28, -48)));
+        const playerScreen = k.toScreen(player.pos.add(0, PLAYER_LIGHT_OFFSET_Y));
+        const lamps = k.get("lamp").map((lamp) => k.toScreen(lampCenter(lamp)));
         for (const lamp of lamps) {
           k.drawCircle({
             pos: lamp, radius: LAMP_RADIUS * uiScale,

@@ -6,7 +6,7 @@ import { expected, fixedRules, groups, OUTPUT, SCALE, SOURCE } from "./asset-con
 import { copyMusicAsset } from "./audio-assets.js";
 import { buildFavicon } from "./favicon.js";
 
-const manifest = { assets: {}, music: {}, decor: { kecil: 0, besar: 0 } };
+const manifest = { assets: {}, fonts: {}, music: {}, decor: { kecil: 0, besar: 0 } };
 let processed = 0;
 let skipped = 0;
 let warnings = 0;
@@ -51,11 +51,15 @@ async function trimmedInfo(file) {
   return info;
 }
 
-async function groupScales() {
+async function groupScales(files) {
   const result = new Map();
   for (const group of groups) {
     const rule = findRule(group.reference);
-    const info = await trimmedInfo(path.join(SOURCE, group.reference));
+    const reference = files.find((file) => relative(file) === group.reference)
+      ?? files.find((file) => relative(file).startsWith(group.prefix) && file.endsWith(".png"));
+    if (!reference) continue;
+    if (relative(reference) !== group.reference) warn(`${group.reference}: memakai frame lain sebagai acuan skala`);
+    const info = await trimmedInfo(reference);
     const dimension = rule[1] === "width" ? info.width : info.height;
     result.set(group.prefix, rule[2] * SCALE / dimension);
   }
@@ -145,17 +149,21 @@ async function main() {
   const files = await walk(SOURCE);
   const names = new Set(files.map(relative));
   for (const missing of expected.filter((name) => !names.has(name))) warn(`${missing}: aset belum ada`);
-  const scales = await groupScales();
+  const scales = await groupScales(files);
   for (const file of files) {
     const name = relative(file);
     const extension = path.extname(file).toLowerCase();
-    if (![".png", ".webp", ".mp3"].includes(extension)) {
+    if (![".png", ".webp", ".jpg", ".jpeg", ".mp3", ".ttf"].includes(extension)) {
       skipped += 1;
       console.warn(`Dilewati: ${name} (file tidak dikenal)`);
       continue;
     }
     try {
-      if (name === "favicon.png") await buildFavicon(file, path.join(OUTPUT, name));
+      if (name === "fonts/PixelifySans.ttf") {
+        await fs.mkdir(path.join(OUTPUT, "fonts"), { recursive: true });
+        await fs.copyFile(file, path.join(OUTPUT, name));
+        manifest.fonts.pixelify = { file: name };
+      } else if (name === "favicon.png") await buildFavicon(file, path.join(OUTPUT, name));
       else if (name.startsWith("music/") && extension === ".mp3") {
         manifest.music[assetKey(name)] = await copyMusicAsset(file, name, OUTPUT);
       } else if (name === "bg/title-asap.webp") await processAnimatedBackground(file, name);

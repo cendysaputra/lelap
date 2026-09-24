@@ -25,7 +25,7 @@ export const LEVELS = [{
     row(),
     row(),
     row(),
-    row([[28, "*"], [55, "*"], [79, "*"]]),
+    row(),
     row([[16, "1"], [40, "1"], [64, "1"], [86, "1"]]),
     row([[20, "v"], [47, "v"], [72, "v"]]),
     row([[2, "P"], [5, "L"], [12, "H"], [15, "b"],
@@ -33,19 +33,25 @@ export const LEVELS = [{
       [36, "m"], [39, "3"], [42, "L"], [45, "s"], [49, "t"], [51, "t"],
       [53, "t"], [55, "t"], [57, "t"], [63, "2"], [67, "H"], [70, "s"],
       [74, "t"], [76, "t"], [78, "t"], [80, "t"], [82, "t"],
-      [86, "L"], [88, "3"], [92, "O"]]),
+      [86, "L"], [88, "3"], [92, "*"]]),
     floor,
     floor,
   ],
 }];
 
 export function validateLevel(level) {
-  if (!level.map.length) throw new Error(`Level ${level.name} tidak memiliki peta.`);
+  if (!Array.isArray(level.map) || !level.map.length || !level.map[0]?.length) throw new Error(`Level ${level.name} tidak memiliki peta.`);
   const width = level.map[0].length;
   level.map.forEach((line, index) => {
+    if (typeof line !== "string") throw new Error(`Baris ${index + 1} harus berupa string.`);
     if (line.length !== width) {
       throw new Error(`Baris ${index + 1} tidak rata: ${line.length}, seharusnya ${width}.`);
     }
+    [...line].forEach((symbol, column) => {
+      if ((symbol === "b" || symbol === "k") && !["#", "b", "k", "t"].includes(level.map[index + 1]?.[column])) {
+        throw new Error(`Objek ${symbol} di baris ${index + 1}, kolom ${column + 1} harus berdiri di atas solid.`);
+      }
+    });
   });
   return { width: width * TILE, height: level.map.length * TILE };
 }

@@ -42,10 +42,12 @@ function platform(k, asset, width) {
 function raisedLane(k, asset, width) {
   const height = assetData(asset)?.height ?? TILE * 2.5;
   return [
-    ...worldSprite(k, asset, { width, height }),
-    k.pos(0, TILE - height), k.anchor("topleft"),
+    k.pos(0, TILE - height),
     k.area({ shape: new k.Rect(k.vec2(0, 0), width, height) }),
     k.body({ isStatic: true }), k.z(5), "solid",
+    { id: "laneVisual", add() {
+      this.add([...worldSprite(k, asset, { width, height }), k.anchor("topleft")]);
+    } },
   ];
 }
 
@@ -92,7 +94,8 @@ export function buildLevel(k, level, entities) {
       {
         id: "floorBacking",
         add() {
-          this.add([k.rect(TILE, TILE), k.color(12, 10, 22), k.z(-1)]);
+          const size = this.is("sprite") ? TILE * 4 : TILE;
+          this.add([k.rect(size, size), k.color(12, 10, 22), k.z(-1)]);
         },
       },
     ];

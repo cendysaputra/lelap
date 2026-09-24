@@ -1,3 +1,4 @@
+import { makeResponsive } from "../ui/responsive.js";
 import { assetData, hasAsset } from "../manifest.js";
 import { COLORS, MENU_LOGO_SCALE, VIEW_HEIGHT } from "../config.js";
 import { createButton, enableButtonNavigation } from "../ui/button.js";
@@ -10,7 +11,7 @@ import {
 } from "../systems/music.js";
 
 function addCover(k, name) {
-  if (!hasAsset(name)) return k.add([k.rect(k.width(), k.height()), k.color(...COLORS.night), k.fixed()]);
+  if (!hasAsset(name)) return null;
   const data = assetData(name);
   const fileScale = Math.max(k.width() / (data.width * 4), k.height() / (data.height * 4));
   return k.add([k.sprite(name), k.pos(k.center()), k.anchor("center"), k.scale(fileScale), k.fixed(), k.z(-100)]);
@@ -20,14 +21,19 @@ function addBottomLayer(k, name) {
   if (!hasAsset(name)) return null;
   const data = assetData(name);
   const fileScale = k.width() / (data.width * 4);
-  return k.add([
+  const layer = k.add([
     k.sprite(name, data.defaultAnim ? { anim: data.defaultAnim } : {}),
     k.pos(k.width() / 2, k.height()),
     k.anchor("bot"), k.scale(fileScale), k.fixed(), k.z(-90),
   ]);
+  layer.onUpdate(() => {
+    layer.pos = k.vec2(k.width() / 2, k.height());
+    layer.scale = k.vec2(k.width() / (data.width * 4));
+  });
+  return layer;
 }
 
-function showControls(k) {
+function showControls(k, onClose) {
   const panel = createPanel(k);
   const uiScale = k.height() / VIEW_HEIGHT;
   const lines = [
@@ -40,8 +46,9 @@ function showControls(k) {
   });
   const close = createButton(k, {
     label: "TUTUP", pos: k.vec2(k.width() / 2, k.height() / 2 + 180 * uiScale), z: 83,
-    onPress: () => { k.destroy(panel); copy.destroy(); k.destroy(close); },
+    onPress: () => { stopNavigation(); k.destroy(panel); copy.destroy(); k.destroy(close); onClose(); },
   });
+  const stopNavigation = enableButtonNavigation(k, [close]);
 }
 
 export function registerMenuScene(k) {
@@ -61,10 +68,10 @@ export function registerMenuScene(k) {
     addBottomLayer(k, "bg/title-asap");
     const uiScale = k.height() / VIEW_HEIGHT;
     if (hasAsset("ui/logo")) {
-      k.add([
+      makeResponsive(k, k.add([
         k.sprite("ui/logo"), k.pos(k.width() / 2, k.height() * 0.28),
         k.anchor("center"), k.scale(MENU_LOGO_SCALE * uiScale), k.fixed(), k.z(10),
-      ]);
+      ]));
     } else addGameText(k, "LELAP", k.vec2(k.width() / 2, k.height() * 0.28), { size: 86 });
     for (let index = 0; index < 24; index += 1) {
       const dust = k.add([
@@ -77,14 +84,23 @@ export function registerMenuScene(k) {
     const start = createButton(k, {
       label: "MULAI", pos: k.vec2(k.width() / 2, k.height() * 0.65),
       onPress: async () => {
+        if (leavingMenu) return;
         leavingMenu = true;
+        buttons.forEach((button) => { button.enabled = false; });
         pauseMenuMusic();
         await requestFullscreen(k);
         fadeTo(k, "game");
       },
     });
     const controls = createButton(k, {
-      label: "CARA MAIN", pos: k.vec2(k.width() / 2, k.height() * 0.78), onPress: () => showControls(k),
+      label: "CARA MAIN", pos: k.vec2(k.width() / 2, k.height() * 0.78), onPress: () => {
+        stopNavigation();
+        buttons.forEach((button) => { button.enabled = false; });
+        showControls(k, () => {
+          buttons.forEach((button) => { button.enabled = true; });
+          stopNavigation = enableButtonNavigation(k, buttons);
+        });
+      },
     });
     const music = createButton(k, {
       label: isMenuMusicMuted() ? "MUSIK: MATI" : "MUSIK: NYALA",
@@ -94,6 +110,7 @@ export function registerMenuScene(k) {
         music.setLabel(muted ? "MUSIK: MATI" : "MUSIK: NYALA");
       },
     });
-    enableButtonNavigation(k, [start, controls, music]);
+    const buttons = [start, controls, music];
+    let stopNavigation = enableButtonNavigation(k, buttons);
   });
 }

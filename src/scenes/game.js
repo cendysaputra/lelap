@@ -43,16 +43,19 @@ export function registerGameScene(k) {
 
     let paused = false;
     let pauseItems = [];
+    let stopNavigation = () => {};
     const setPaused = (value) => {
       paused = value;
       k.get("gameplay").forEach((object) => { object.paused = value; });
     };
     const closePause = () => {
+      stopNavigation();
       setPaused(false);
       pauseItems.forEach((item) => item.destroy?.());
       pauseItems = [];
     };
     k.onKeyPress("p", () => {
+      if (player.dead) return;
       if (paused) return closePause();
       setPaused(true);
       const panel = createPanel(k, { z: 200 });
@@ -60,7 +63,7 @@ export function registerGameScene(k) {
       const resume = createButton(k, { label: "LANJUT", pos: k.vec2(k.width() / 2, k.height() * 0.58), z: 210, onPress: closePause });
       const menu = createButton(k, { label: "MENU", pos: k.vec2(k.width() / 2, k.height() * 0.72), z: 210, onPress: () => { setPaused(false); fadeTo(k, "menu"); } });
       pauseItems = [panel, title, resume, menu];
-      enableButtonNavigation(k, [resume, menu]);
+      stopNavigation = enableButtonNavigation(k, [resume, menu]);
     });
   });
 }

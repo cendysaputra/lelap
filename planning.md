@@ -1,5 +1,24 @@
 # Status Pengerjaan LELAP
 
+## Audit 24 September 2026
+
+Perubahan terbaru mengikuti AGENTS.md yang diberikan pengguna. Tujuan Level 1
+sekarang satu boneka di ujung peta; menyentuhnya langsung membuka layar menang.
+Catatan historis tentang tiga boneka dan portal di bawah serta di dokumen plan
+bukan lagi aturan alur permainan yang aktif.
+
+Perbaikan mencakup fallback sprite/font, hitbox lane dan backing lantai, tabrakan
+Bayangan yang sudah bersentuhan, pause dan fokus keyboard panel, fullscreen
+lintas scene, resize UI/background, stamina saat bersembunyi, pusat cahaya lampu,
+dan deteksi pandangan Pengembara terhadap solid. Font kini memiliki sumber di
+assets-src/fonts dan dicatat pipeline dalam manifest.
+
+Validasi: npm run assets berhasil (58 file, tanpa peringatan), dan npm run build
+berhasil. Tidak menjalankan test suite atau playthrough browser; kelancaran rute
+serta rasa permainan masih perlu diperiksa secara manual.
+
+---
+
 Dokumen ini adalah handoff proyek per 23 September 2026. `AGENTS.md` adalah
 sumber aturan utama. Catatan di bawah berasal dari pemeriksaan source dan build;
 hasil uji browser lama disebut terpisah agar tidak dianggap verifikasi terbaru.

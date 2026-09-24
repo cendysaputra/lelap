@@ -5,7 +5,7 @@ import {
   WANDERER_PATROL_SPEED, WANDERER_SIGHT_HEIGHT, WANDERER_SIGHT_RANGE,
   WANDERER_ANIMATION_FPS,
 } from "../config.js";
-import { hasAsset } from "../manifest.js";
+import { gameFont, hasAsset } from "../manifest.js";
 import { addGroundShadow, moveOutsideLamp, setVisualFrame } from "./shared.js";
 
 function lineBlocked(solids, from, to) {
@@ -14,9 +14,9 @@ function lineBlocked(solids, from, to) {
   return solids.some((solid) => {
     const box = solid.worldArea?.().bbox();
     if (!box) return false;
-    const crossesX = box.pos.x < right && box.pos.x + box.width > left;
-    const lineY = from.y - 36;
-    return crossesX && lineY > box.pos.y && lineY < box.pos.y + box.height;
+    if (box.pos.x >= right || box.pos.x + box.width <= left) return false;
+    const hit = solid.worldArea().raycast(from.add(0, -36), to.sub(from).add(0, 4));
+    return hit && hit.fraction >= 0 && hit.fraction <= 1;
   });
 }
 
@@ -36,12 +36,12 @@ export function createWanderer(k, position) {
     },
   ]);
   const visual = ghost.add([
-    hasAsset("hantu/pengembara/melayang-1") ? k.sprite("hantu/pengembara/melayang-1") : k.rect(56, 72),
+    hasAsset("hantu/pengembara/melayang-1") ? k.sprite("hantu/pengembara/melayang-1") : k.rect(224, 288),
     k.anchor("bot"), k.scale(0.25), k.pos(0, 0),
     { currentFrame: "hantu/pengembara/melayang-1" },
   ]);
   const alert = ghost.add([
-    k.text("!", { size: 42, font: "pixelify" }), k.color(224, 71, 76),
+    k.text("!", { size: 42, font: gameFont() }), k.color(224, 71, 76), k.scale(1),
     k.outline(3, k.rgb(21, 19, 38)), k.anchor("center"), k.pos(0, -100), k.opacity(0),
   ]);
   addGroundShadow(k, ghost, 30, 4);
@@ -49,11 +49,11 @@ export function createWanderer(k, position) {
   ghost.onUpdate(() => {
     const player = k.get("player")[0];
     if (!player || player.dead) return;
-    const solids = ghost.solids ??= (k.get("level")[0]?.get("solid") ?? []);
+    const solids = ghost.solids ??= k.get("solid", { recursive: true });
     ghost.animationTime += k.dt();
-    const frame = Math.floor(ghost.animationTime * WANDERER_ANIMATION_FPS) % 4 + 1;
-    const frameName = `hantu/pengembara/melayang-${frame}`;
-    if (hasAsset(frameName)) setVisualFrame(k, visual, frameName);
+    const frames = [1, 2, 3, 4].map((frame) => `hantu/pengembara/melayang-${frame}`).filter(hasAsset);
+    const frameName = frames[Math.floor(ghost.animationTime * WANDERER_ANIMATION_FPS) % frames.length];
+    setVisualFrame(k, visual, frameName ?? "hantu/pengembara/melayang-1");
     visual.pos.y = Math.sin(k.time() * 2 + ghost.origin.x) * GHOST_BOB;
 
     const dx = player.pos.x - ghost.pos.x;
@@ -86,7 +86,7 @@ export function createWanderer(k, position) {
       ghost.lostTime = 0;
     }
     if (ghost.state === "patrol") {
-      if (!sees && player.isRunning && Math.abs(dx) <= WANDERER_HEAR_RANGE) {
+      if (!sees && player.isRunning && player.pos.dist(ghost.pos) <= WANDERER_HEAR_RANGE) {
         ghost.facing = Math.sign(dx) || ghost.facing;
       }
       const next = ghost.pos.add(k.vec2(ghost.facing * WANDERER_PATROL_SPEED * k.dt(), 0));
@@ -113,7 +113,7 @@ export function createWanderer(k, position) {
       }
     } else if (ghost.state === "chase") {
       ghost.facing = Math.sign(dx) || ghost.facing;
-      ghost.lostTime = sees ? 0 : ghost.lostTime + k.dt();
+      ghost.lostTime = canSee ? 0 : ghost.lostTime + k.dt();
       const direction = player.pos.sub(ghost.pos).unit();
       const next = ghost.pos.add(direction.scale(WANDERER_CHASE_SPEED * k.dt()));
       const movement = moveOutsideLamp(k, ghost, next);

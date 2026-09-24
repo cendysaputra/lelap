@@ -10,7 +10,7 @@
 
 LELAP adalah game platformer dua dimensi dengan tampilan samping dan gaya pixel art. Ceritanya mengikuti seorang anak kecil yang terperangkap di dalam mimpi. Rumah yang ia kenal telah berubah menjadi lorong gelap yang mustahil, dipenuhi bayangan hidup, hantu, perabot tua, dan cahaya bulan yang terasa dingin.
 
-Di dalam mimpi ini tidak ada senjata dan tidak ada perlawanan. Sang anak hanya dapat berjalan, berlari, melompat, bersembunyi, dan mencari tempat yang masih diterangi cahaya. Ia harus menemukan tiga boneka beruang agar portal keluar dari mimpi buruk muncul.
+Di dalam mimpi ini tidak ada senjata dan tidak ada perlawanan. Sang anak hanya dapat berjalan, berlari, melompat, bersembunyi, dan mencari tempat yang masih diterangi cahaya. Ia harus menemukan boneka beruang kesayangannya di ujung mimpi. Menyentuh boneka menyelesaikan Level 1.
 
 <div align="center">
   <img src="assets-src/player/idle.png" alt="Karakter utama LELAP" height="220">
@@ -136,10 +136,10 @@ Seluruh angka yang memengaruhi rasa permainan ditempatkan dalam konfigurasi terp
 
 ## Arah pengembangan
 
-Fokus proyek saat ini sepenuhnya berada pada penyelesaian **Mimpi Buruk** sebagai pengalaman singkat yang utuh. Tujuannya adalah menghadirkan perjalanan sekitar dua menit yang tetap terasa tegang, mudah dipahami, dan adil. Setiap ancaman harus memberi tanda sebelum menyerang, setiap kegagalan harus dapat dipelajari, dan perjalanan mengumpulkan tiga boneka menuju portal harus terasa seperti keberanian kecil di tengah mimpi yang besar.
+Fokus proyek saat ini sepenuhnya berada pada penyelesaian **Mimpi Buruk** sebagai pengalaman singkat yang utuh. Tujuannya adalah menghadirkan perjalanan sekitar dua menit yang tetap terasa tegang, mudah dipahami, dan adil. Setiap ancaman harus memberi tanda sebelum menyerang, setiap kegagalan harus dapat dipelajari, dan perjalanan menemukan boneka di ujung mimpi harus terasa seperti keberanian kecil di tengah mimpi yang besar.
 
 <div align="center">
   <img src="assets-src/objek/boneka.png" alt="Boneka beruang di ujung mimpi" height="220">
 
-  <p><strong>Temukan ketiga boneka. Buka jalan keluar dari mimpi buruk.</strong></p>
+  <p><strong>Temukan boneka kesayanganmu di ujung mimpi buruk.</strong></p>
 </div>

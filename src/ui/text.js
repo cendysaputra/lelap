@@ -1,3 +1,5 @@
+import { gameFont } from "../manifest.js";
+import { makeResponsive } from "./responsive.js";
 import { COLORS, VIEW_HEIGHT } from "../config.js";
 
 export function textComponents(k, value, options = {}) {
@@ -7,7 +9,7 @@ export function textComponents(k, value, options = {}) {
       size: (options.size ?? 28) * uiScale,
       width: options.width ? options.width * uiScale : undefined,
       align: options.align ?? "center",
-      font: "pixelify",
+      font: gameFont(),
       lineSpacing: (options.lineSpacing ?? 6) * uiScale,
     }),
     k.color(...(options.color ?? COLORS.moon)),
@@ -27,6 +29,10 @@ export function addGameText(k, value, position, options = {}) {
     k.opacity(0.6),
   ]);
   const label = k.add([...textComponents(k, value, options), k.pos(position)]);
+  if (options.fixed !== false) {
+    makeResponsive(k, shadow);
+    makeResponsive(k, label);
+  }
   return {
     label,
     shadow,
